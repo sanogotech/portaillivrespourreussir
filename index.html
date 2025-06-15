@@ -9,21 +9,28 @@
     <!-- Font Awesome pour les icônes -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --success-color: #2ecc71;
-            --marketing-color: #e74c3c;
-            --psychology-color: #9b59b6;
-            --finance-color: #f39c12;
-            --productivity-color: #3498db;
-            --leadership-color: #1abc9c;
-            --spirituality-color: #34495e;
-            --health-color: #e84393;
-        }
+       <!--  :root {
+            --primary-color: #2c3e50;   /* Bleu nuit profond */
+            --secondary-color: #7f8c8d; /* Gris anthracite */
+            --accent-color: #16a085;    /* Vert émeraude */
+            --light-color: #ecf0f1;     /* Gris très clair */
+        } -->
+		
+		:root {
+			--primary-color: #007bff;
+			--secondary-color: #6c757d;
+			--accent-color: #16a085;  /* Cette couleur est utilisée pour le fond actif */
+			
+		}
+
         
         body {
-            background-color: #f8f9fa;
+            background-color: #f9f9f9;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            line-height: 1.6;
         }
+        
         .header {
             background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
             color: white;
@@ -32,25 +39,84 @@
             border-radius: 0 0 20px 20px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
+        
+        .header h1 {
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+        
+        .header p {
+            font-weight: 300;
+            opacity: 0.9;
+        }
+/* Navigation tabs - conteneur */
+.nav-tabs {
+    display: flex;
+    border-bottom: 2px solid #ddd;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-color) transparent;
+    background: #f9f9f9;
+    padding: 0.3rem 0.5rem;
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+
+/* Onglet normal */
+.nav-tabs .nav-link {
+    color: var(--secondary-color);
+    font-weight: 500;
+    padding: 0.75rem 1.25rem;
+    margin: 0 0.3rem;
+    border: none;
+    border-radius: 0.5rem 0.5rem 0 0;
+    background-color: transparent;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+/* Onglet survolé */
+.nav-tabs .nav-link:hover {
+    color: var(--primary-color);
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+/* Onglet actif avec fond visible */
+.nav-tabs .nav-link.active {
+    color: #fff;
+    background-color: var(--accent-color); /* FOND COLORE */
+    font-weight: 600;
+    border-bottom: 3px solid var(--accent-color);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Focus accessible */
+.nav-tabs .nav-link:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.15rem rgba(100, 100, 255, 0.25);
+}
+
+
+        
+        /* Book cards */
         .book-card {
             transition: all 0.3s ease;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 30px;
-            height: 100%;
-            opacity: 0;
-            transform: translateY(20px);
             border: none;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-radius: 0;
+            margin-bottom: 2rem;
+            height: 100%;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            overflow: hidden;
+            background-color: white;
         }
-        .book-card.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        
         .book-card:hover {
-            transform: translateY(-10px) !important;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
         }
+        
         .book-cover {
             height: 180px;
             display: flex;
@@ -58,106 +124,215 @@
             justify-content: center;
             color: white;
             font-size: 3rem;
+            background-color: var(--primary-color);
+            position: relative;
+            overflow: hidden;
         }
-        .success-bg { background-color: var(--success-color); }
-        .marketing-bg { background-color: var(--marketing-color); }
-        .psychology-bg { background-color: var(--psychology-color); }
-        .finance-bg { background-color: var(--finance-color); }
-        .productivity-bg { background-color: var(--productivity-color); }
-        .leadership-bg { background-color: var(--leadership-color); }
-        .spirituality-bg { background-color: var(--spirituality-color); }
-        .health-bg { background-color: var(--health-color); }
         
-        .nav-tabs {
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            overflow-y: hidden;
-            white-space: nowrap;
-            border: none;
-            padding-bottom: 5px;
+        .book-cover::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(44,62,80,0.9) 0%, rgba(127,140,141,0.8) 100%);
+            opacity: 0.9;
         }
-        .nav-tabs::-webkit-scrollbar {
-            height: 5px;
-        }
-        .nav-tabs::-webkit-scrollbar-thumb {
-            background: #2575fc;
-            border-radius: 10px;
-        }
-        .nav-tabs .nav-link {
-            color: #495057;
-            font-weight: 500;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 30px;
-            margin: 0 5px;
-            white-space: nowrap;
-            transition: all 0.3s;
-        }
-        .nav-tabs .nav-link.active {
-            color: white !important;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        .nav-tabs .nav-link.success { background-color: var(--success-color); }
-        .nav-tabs .nav-link.marketing { background-color: var(--marketing-color); }
-        .nav-tabs .nav-link.psychology { background-color: var(--psychology-color); }
-        .nav-tabs .nav-link.finance { background-color: var(--finance-color); }
-        .nav-tabs .nav-link.productivity { background-color: var(--productivity-color); }
-        .nav-tabs .nav-link.leadership { background-color: var(--leadership-color); }
-        .nav-tabs .nav-link.spirituality { background-color: var(--spirituality-color); }
-        .nav-tabs .nav-link.health { background-color: var(--health-color); }
         
-        .tab-content {
-            padding: 30px 0;
+        .book-cover i {
+            position: relative;
+            z-index: 1;
+            opacity: 0.9;
         }
-        .author {
-            color: #6c757d;
-            font-style: italic;
-            font-size: 0.9rem;
+        
+        .card-body {
+            padding: 1.5rem;
         }
-        .rating {
-            color: #ffc107;
-            font-size: 0.9rem;
-            margin-bottom: 10px;
-        }
-        .btn-details {
-            background: linear-gradient(to right, #6a11cb, #2575fc);
-            border: none;
-            font-size: 0.85rem;
-            padding: 5px 15px;
-            color: white;
-        }
-        .category-title {
+        
+        .card-title {
+            font-size: 1.1rem;
             font-weight: 600;
-            color: #343a40;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #2575fc;
-            display: inline-block;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
         }
-        .modal-header {
-            border-bottom: none;
+        
+        .author {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            font-style: italic;
         }
-        .badge-category {
-            font-size: 0.8rem;
-            padding: 5px 10px;
-            border-radius: 20px;
+        
+        .rating {
+            color: #f39c12;
+            font-size: 0.9rem;
+            margin-bottom: 1.2rem;
+        }
+        
+        .btn-details {
+            background-color: var(--accent-color);
             color: white;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            font-size: 0.85rem;
+            border-radius: 0;
+            transition: all 0.3s ease;
         }
+        
+        .btn-details:hover {
+            background-color: #1a7a68;
+            transform: translateY(-2px);
+        }
+        
+        .category-title {
+            font-weight: 400;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-color);
+            display: inline-block;
+            font-size: 1.4rem;
+        }
+        
+        /* Modal styles */
+        .modal-content {
+            border-radius: 0;
+            border: none;
+        }
+        
+        .modal-header {
+            border-bottom: 1px solid #eee;
+            padding: 1.5rem;
+        }
+        
+        .modal-title {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+        
+        .modal-body {
+            padding: 2rem;
+        }
+        
+        .book-cover-modal {
+            height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .book-cover-modal::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(44,62,80,0.9) 0%, rgba(127,140,141,0.8) 100%);
+            opacity: 0.9;
+        }
+        
+        .book-cover-modal i {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .modal-book-title {
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .modal-author {
+            color: var(--secondary-color);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            margin: 1.5rem 0 1rem;
+            font-weight: 500;
+            border-left: 4px solid var(--accent-color);
+            padding-left: 0.8rem;
+        }
+        
         .lesson-item {
-            margin-bottom: 10px;
-            padding-left: 20px;
+            margin-bottom: 0.8rem;
+            padding-left: 1.5rem;
             position: relative;
         }
-        .lesson-item:before {
-            content: "✓";
+        
+        .lesson-item::before {
+            content: "•";
             position: absolute;
             left: 0;
-            color: var(--success-color);
+            color: var(--accent-color);
             font-weight: bold;
         }
+        
         .practice-card {
-            border-left: 4px solid;
-            margin-bottom: 15px;
+            border-left: 4px solid var(--accent-color);
+            margin-bottom: 1.5rem;
+            background-color: #f9f9f9;
+            padding: 1rem;
+        }
+        
+        .practice-card h6 {
+            color: var(--primary-color);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        
+        .badge-category {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            border-radius: 0;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        footer p {
+            margin: 0;
+            font-weight: 300;
+            opacity: 0.8;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .header {
+                padding: 2rem 0;
+            }
+            
+            .book-cover {
+                height: 150px;
+            }
+            
+            .modal-body {
+                padding: 1.5rem;
+            }
         }
     </style>
 </head>
@@ -1321,7 +1496,7 @@
 
     <footer class="bg-dark text-white text-center py-4 mt-5">
         <div class="container">
-            <p>© 2023 Bibliothèque Premium. Tous droits réservés.</p>
+            <p>© 2025 Bibliothèque Premium. Tous droits réservés.</p>
         </div>
     </footer>
 
