@@ -1,0 +1,1532 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bibliothèque Premium - Livres de développement personnel</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --success-color: #2ecc71;
+            --marketing-color: #e74c3c;
+            --psychology-color: #9b59b6;
+            --finance-color: #f39c12;
+            --productivity-color: #3498db;
+            --leadership-color: #1abc9c;
+            --spirituality-color: #34495e;
+            --health-color: #e84393;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .book-card {
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            height: 100%;
+            opacity: 0;
+            transform: translateY(20px);
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .book-card.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .book-card:hover {
+            transform: translateY(-10px) !important;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        .book-cover {
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+        .success-bg { background-color: var(--success-color); }
+        .marketing-bg { background-color: var(--marketing-color); }
+        .psychology-bg { background-color: var(--psychology-color); }
+        .finance-bg { background-color: var(--finance-color); }
+        .productivity-bg { background-color: var(--productivity-color); }
+        .leadership-bg { background-color: var(--leadership-color); }
+        .spirituality-bg { background-color: var(--spirituality-color); }
+        .health-bg { background-color: var(--health-color); }
+        
+        .nav-tabs {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: nowrap;
+            border: none;
+            padding-bottom: 5px;
+        }
+        .nav-tabs::-webkit-scrollbar {
+            height: 5px;
+        }
+        .nav-tabs::-webkit-scrollbar-thumb {
+            background: #2575fc;
+            border-radius: 10px;
+        }
+        .nav-tabs .nav-link {
+            color: #495057;
+            font-weight: 500;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 30px;
+            margin: 0 5px;
+            white-space: nowrap;
+            transition: all 0.3s;
+        }
+        .nav-tabs .nav-link.active {
+            color: white !important;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .nav-tabs .nav-link.success { background-color: var(--success-color); }
+        .nav-tabs .nav-link.marketing { background-color: var(--marketing-color); }
+        .nav-tabs .nav-link.psychology { background-color: var(--psychology-color); }
+        .nav-tabs .nav-link.finance { background-color: var(--finance-color); }
+        .nav-tabs .nav-link.productivity { background-color: var(--productivity-color); }
+        .nav-tabs .nav-link.leadership { background-color: var(--leadership-color); }
+        .nav-tabs .nav-link.spirituality { background-color: var(--spirituality-color); }
+        .nav-tabs .nav-link.health { background-color: var(--health-color); }
+        
+        .tab-content {
+            padding: 30px 0;
+        }
+        .author {
+            color: #6c757d;
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+        .rating {
+            color: #ffc107;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        .btn-details {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            border: none;
+            font-size: 0.85rem;
+            padding: 5px 15px;
+            color: white;
+        }
+        .category-title {
+            font-weight: 600;
+            color: #343a40;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #2575fc;
+            display: inline-block;
+        }
+        .modal-header {
+            border-bottom: none;
+        }
+        .badge-category {
+            font-size: 0.8rem;
+            padding: 5px 10px;
+            border-radius: 20px;
+            color: white;
+        }
+        .lesson-item {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+        .lesson-item:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--success-color);
+            font-weight: bold;
+        }
+        .practice-card {
+            border-left: 4px solid;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header text-center">
+        <div class="container">
+            <h1 class="display-4">Bibliothèque Premium</h1>
+            <p class="lead">Découvrez les livres qui transformeront votre vie et votre carrière</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <ul class="nav nav-tabs" id="bookTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active success" id="success-tab" data-bs-toggle="tab" data-bs-target="#success" type="button" role="tab"><i class="fas fa-trophy me-2"></i>Succès</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link marketing" id="marketing-tab" data-bs-toggle="tab" data-bs-target="#marketing" type="button" role="tab"><i class="fas fa-bullhorn me-2"></i>Marketing</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link psychology" id="psychology-tab" data-bs-toggle="tab" data-bs-target="#psychology" type="button" role="tab"><i class="fas fa-brain me-2"></i>Psychologie</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link finance" id="finance-tab" data-bs-toggle="tab" data-bs-target="#finance" type="button" role="tab"><i class="fas fa-coins me-2"></i>Finance</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link productivity" id="productivity-tab" data-bs-toggle="tab" data-bs-target="#productivity" type="button" role="tab"><i class="fas fa-clock me-2"></i>Productivité</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link leadership" id="leadership-tab" data-bs-toggle="tab" data-bs-target="#leadership" type="button" role="tab"><i class="fas fa-users me-2"></i>Leadership</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link spirituality" id="spirituality-tab" data-bs-toggle="tab" data-bs-target="#spirituality" type="button" role="tab"><i class="fas fa-spa me-2"></i>Spiritualité</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link health" id="health-tab" data-bs-toggle="tab" data-bs-target="#health" type="button" role="tab"><i class="fas fa-heartbeat me-2"></i>Santé</button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="bookTabsContent">
+            <!-- Onglet Succès -->
+            <div class="tab-pane fade show active" id="success" role="tabpanel">
+                <h3 class="category-title"><i class="fas fa-trophy me-2"></i>Livres sur le Succès</h3>
+                <div class="row">
+                    <!-- Ligne 1 -->
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="1">
+                            <div class="book-cover success-bg">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Réfléchissez et devenez riche</h5>
+                                <p class="author">Napoleon Hill</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.2/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="2">
+                            <div class="book-cover success-bg">
+                                <i class="fas fa-chess-queen"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Plus malin que le diable</h5>
+                                <p class="author">Napoleon Hill</p>
+                                <div class="rating">★★★★★ <span class="text-muted">(4.8/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="3">
+                            <div class="book-cover success-bg">
+                                <i class="fas fa-road"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">La troisième voie</h5>
+                                <p class="author">Stephen Covey</p>
+                                <div class="rating">★★★★★ <span class="text-muted">(4.7/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Ligne 2 -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="4">
+                            <div class="book-cover success-bg">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Le pouvoir de votre subconscient</h5>
+                                <p class="author">Joseph Murphy</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.3/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="5">
+                            <div class="book-cover success-bg">
+                                <i class="fas fa-gem"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">L'homme le plus riche de Babylone</h5>
+                                <p class="author">George S. Clason</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.1/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="6">
+                            <div class="book-cover success-bg">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Père riche, père pauvre</h5>
+                                <p class="author">Robert Kiyosaki</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.0/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Ligne 3 -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="7">
+                            <div class="book-cover success-bg">
+                                <i class="fas fa-chess"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Les lois de la nature humaine</h5>
+                                <p class="author">Robert Greene</p>
+                                <div class="rating">★★★★★ <span class="text-muted">(4.9/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="8">
+                            <div class="book-cover success-bg">
+                                <i class="fas fa-sun"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Le Miracle Morning</h5>
+                                <p class="author">Hal Elrod</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.2/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="9">
+                            <div class="book-cover success-bg">
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Le principe 80/20</h5>
+                                <p class="author">Richard Koch</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.1/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Onglet Marketing -->
+            <div class="tab-pane fade" id="marketing" role="tabpanel">
+                <h3 class="category-title"><i class="fas fa-bullhorn me-2"></i>Livres de Marketing</h3>
+                <div class="row">
+                    <!-- Ligne 1 -->
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="10">
+                            <div class="book-cover marketing-bg">
+                                <i class="fas fa-ad"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">This Is Marketing</h5>
+                                <p class="author">Seth Godin</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.3/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="11">
+                            <div class="book-cover marketing-bg">
+                                <i class="fas fa-handshake"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Influence et Manipulation</h5>
+                                <p class="author">Robert Cialdini</p>
+                                <div class="rating">★★★★★ <span class="text-muted">(4.8/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="12">
+                            <div class="book-cover marketing-bg">
+                                <i class="fas fa-cow"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Purple Cow</h5>
+                                <p class="author">Seth Godin</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.2/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Ligne 2 -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="13">
+                            <div class="book-cover marketing-bg">
+                                <i class="fas fa-virus"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Contagious</h5>
+                                <p class="author">Jonah Berger</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.1/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="14">
+                            <div class="book-cover marketing-bg">
+                                <i class="fas fa-book-open"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Building a StoryBrand</h5>
+                                <p class="author">Donald Miller</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.3/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="15">
+                            <div class="book-cover marketing-bg">
+                                <i class="fas fa-fish"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Hooked</h5>
+                                <p class="author">Nir Eyal</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.0/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Ligne 3 -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="16">
+                            <div class="book-cover marketing-bg">
+                                <i class="fas fa-boxing-glove"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Jab, Jab, Jab, Right Hook</h5>
+                                <p class="author">Gary Vaynerchuk</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.2/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="17">
+                            <div class="book-cover marketing-bg">
+                                <i class="fas fa-tractor"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Traction</h5>
+                                <p class="author">Gabriel Weinberg</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.1/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="18">
+                            <div class="book-cover marketing-bg">
+                                <i class="fas fa-gap"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Crossing the Chasm</h5>
+                                <p class="author">Geoffrey Moore</p>
+                                <div class="rating">★★★★★ <span class="text-muted">(4.7/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Onglet Psychologie -->
+            <div class="tab-pane fade" id="psychology" role="tabpanel">
+                <h3 class="category-title"><i class="fas fa-brain me-2"></i>Livres de Psychologie</h3>
+                <div class="row">
+                    <!-- Ligne 1 -->
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="19">
+                            <div class="book-cover psychology-bg">
+                                <i class="fas fa-hands-helping"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Petit éloge de la responsabilité</h5>
+                                <p class="author">Sophie Chiche & Mark Samuel</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.2/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="20">
+                            <div class="book-cover psychology-bg">
+                                <i class="fas fa-running"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Thinking, Fast and Slow</h5>
+                                <p class="author">Daniel Kahneman</p>
+                                <div class="rating">★★★★★ <span class="text-muted">(4.9/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="21">
+                            <div class="book-cover psychology-bg">
+                                <i class="fas fa-redo"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Le pouvoir des habitudes</h5>
+                                <p class="author">Charles Duhigg</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.3/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Ligne 2 -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="22">
+                            <div class="book-cover psychology-bg">
+                                <i class="fas fa-meh"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">L'art subtil de s'en foutre</h5>
+                                <p class="author">Mark Manson</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.1/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="23">
+                            <div class="book-cover psychology-bg">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Man's Search for Meaning</h5>
+                                <p class="author">Viktor Frankl</p>
+                                <div class="rating">★★★★★ <span class="text-muted">(4.8/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="24">
+                            <div class="book-cover psychology-bg">
+                                <i class="fas fa-handshake"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Les quatre accords toltèques</h5>
+                                <p class="author">Don Miguel Ruiz</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.2/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Ligne 3 -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="25">
+                            <div class="book-cover psychology-bg">
+                                <i class="fas fa-devil"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">L'effet Lucifer</h5>
+                                <p class="author">Philip Zimbardo</p>
+                                <div class="rating">★★★★★ <span class="text-muted">(4.7/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="26">
+                            <div class="book-cover psychology-bg">
+                                <i class="fas fa-bug"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Le bug humain</h5>
+                                <p class="author">Sebastian Dieguez</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.0/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="27">
+                            <div class="book-cover psychology-bg">
+                                <i class="fas fa-window-maximize"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Les mots sont des fenêtres</h5>
+                                <p class="author">Marshall Rosenberg</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.3/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Onglet Finance -->
+            <div class="tab-pane fade" id="finance" role="tabpanel">
+                <h3 class="category-title"><i class="fas fa-coins me-2"></i>Livres de Finance</h3>
+                <div class="row">
+                    <!-- Ligne 1 -->
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="28">
+                            <div class="book-cover finance-bg">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">L'investisseur intelligent</h5>
+                                <p class="author">Benjamin Graham</p>
+                                <div class="rating">★★★★★ <span class="text-muted">(4.8/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="29">
+                            <div class="book-cover finance-bg">
+                                <i class="fas fa-dad-joke"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Rich Dad Poor Dad</h5>
+                                <p class="author">Robert Kiyosaki</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.2/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="30">
+                            <div class="book-cover finance-bg">
+                                <i class="fas fa-fast-forward"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">The Millionaire Fastlane</h5>
+                                <p class="author">MJ DeMarco</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.3/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Ligne 2 -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="31">
+                            <div class="book-cover finance-bg">
+                                <i class="fas fa-makeup-brush"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">The Total Money Makeover</h5>
+                                <p class="author">Dave Ramsey</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.1/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="32">
+                            <div class="book-cover finance-bg">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">The Little Book of Common Sense Investing</h5>
+                                <p class="author">John C. Bogle</p>
+                                <div class="rating">★★★★★ <span class="text-muted">(4.7/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="33">
+                            <div class="book-cover finance-bg">
+                                <i class="fas fa-life-ring"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Your Money or Your Life</h5>
+                                <p class="author">Vicki Robin</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.2/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Ligne 3 -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="34">
+                            <div class="book-cover finance-bg">
+                                <i class="fas fa-landmark"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">The Richest Man in Babylon</h5>
+                                <p class="author">George S. Clason</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.1/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="35">
+                            <div class="book-cover finance-bg">
+                                <i class="fas fa-map"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">The Simple Path to Wealth</h5>
+                                <p class="author">JL Collins</p>
+                                <div class="rating">★★★★★ <span class="text-muted">(4.8/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="36">
+                            <div class="book-cover finance-bg">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Unshakeable</h5>
+                                <p class="author">Tony Robbins</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.3/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Onglet Productivité -->
+            <div class="tab-pane fade" id="productivity" role="tabpanel">
+                <h3 class="category-title"><i class="fas fa-clock me-2"></i>Livres sur la Productivité</h3>
+                <div class="row">
+                    <!-- Ligne 1 -->
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="37">
+                            <div class="book-cover productivity-bg">
+                                <i class="fas fa-atom"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Atomic Habits</h5>
+                                <p class="author">James Clear</p>
+                                <div class="rating">★★★★★ <span class="text-muted">(4.8/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="38">
+                            <div class="book-cover productivity-bg">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Getting Things Done</h5>
+                                <p class="author">David Allen</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.3/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="39">
+                            <div class="book-cover productivity-bg">
+                                <i class="fas fa-pomodore"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">The Pomodoro Technique</h5>
+                                <p class="author">Francesco Cirillo</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.1/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Ligne 2 -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="40">
+                            <div class="book-cover productivity-bg">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Deep Work</h5>
+                                <p class="author">Cal Newport</p>
+                                <div class="rating">★★★★★ <span class="text-muted">(4.7/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="41">
+                            <div class="book-cover productivity-bg">
+                                <i class="fas fa-essentials"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Essentialism</h5>
+                                <p class="author">Greg McKeown</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.4/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="42">
+                            <div class="book-cover productivity-bg">
+                                <i class="fas fa-week"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">The 4-Hour Workweek</h5>
+                                <p class="author">Tim Ferriss</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.0/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Ligne 3 -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="43">
+                            <div class="book-cover productivity-bg">
+                                <i class="fas fa-power-off"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">The Power of Full Engagement</h5>
+                                <p class="author">Jim Loehr</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.2/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="44">
+                            <div class="book-cover productivity-bg">
+                                <i class="fas fa-morning"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">My Morning Routine</h5>
+                                <p class="author">Benjamin Spall</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.1/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="45">
+                            <div class="book-cover productivity-bg">
+                                <i class="fas fa-focus"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Hyperfocus</h5>
+                                <p class="author">Chris Bailey</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.0/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Onglet Leadership -->
+            <div class="tab-pane fade" id="leadership" role="tabpanel">
+                <h3 class="category-title"><i class="fas fa-users me-2"></i>Livres sur le Leadership</h3>
+                <div class="row">
+                    <!-- Ligne 1 -->
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="46">
+                            <div class="book-cover leadership-bg">
+                                <i class="fas fa-habits"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Les 7 habitudes</h5>
+                                <p class="author">Stephen Covey</p>
+                                <div class="rating">★★★★★ <span class="text-muted">(4.8/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="47">
+                            <div class="book-cover leadership-bg">
+                                <i class="fas fa-start"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Start with Why</h5>
+                                <p class="author">Simon Sinek</p>
+                                <div class="rating">★★★★★ <span class="text-muted">(4.7/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="48">
+                            <div class="book-cover leadership-bg">
+                                <i class="fas fa-lean"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Leaders Eat Last</h5>
+                                <p class="author">Simon Sinek</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.3/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Ligne 2 -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="49">
+                            <div class="book-cover leadership-bg">
+                                <i class="fas fa-extreme"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Extreme Ownership</h5>
+                                <p class="author">Jocko Willink</p>
+                                <div class="rating">★★★★★ <span class="text-muted">(4.9/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="50">
+                            <div class="book-cover leadership-bg">
+                                <i class="fas fa-culture"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">The Culture Code</h5>
+                                <p class="author">Daniel Coyle</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.4/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="51">
+                            <div class="book-cover leadership-bg">
+                                <i class="fas fa-five"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">The Five Dysfunctions of a Team</h5>
+                                <p class="author">Patrick Lencioni</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.2/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Ligne 3 -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="52">
+                            <div class="book-cover leadership-bg">
+                                <i class="fas fa-21"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">The 21 Irrefutable Laws of Leadership</h5>
+                                <p class="author">John C. Maxwell</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.3/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="53">
+                            <div class="book-cover leadership-bg">
+                                <i class="fas fa-primal"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Primal Leadership</h5>
+                                <p class="author">Daniel Goleman</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.1/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="54">
+                            <div class="book-cover leadership-bg">
+                                <i class="fas fa-dare"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Dare to Lead</h5>
+                                <p class="author">Brené Brown</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.2/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Onglet Spiritualité -->
+            <div class="tab-pane fade" id="spirituality" role="tabpanel">
+                <h3 class="category-title"><i class="fas fa-spa me-2"></i>Livres sur la Spiritualité</h3>
+                <div class="row">
+                    <!-- Ligne 1 -->
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="55">
+                            <div class="book-cover spirituality-bg">
+                                <i class="fas fa-power"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Le pouvoir du moment présent</h5>
+                                <p class="author">Eckhart Tolle</p>
+                                <div class="rating">★★★★★ <span class="text-muted">(4.8/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="56">
+                            <div class="book-cover spirituality-bg">
+                                <i class="fas fa-untethered"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">The Untethered Soul</h5>
+                                <p class="author">Michael A. Singer</p>
+                                <div class="rating">★★★★★ <span class="text-muted">(4.7/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="57">
+                            <div class="book-cover spirituality-bg">
+                                <i class="fas fa-miracle"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">A Course in Miracles</h5>
+                                <p class="author">Helen Schucman</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.3/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Ligne 2 -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="58">
+                            <div class="book-cover spirituality-bg">
+                                <i class="fas fa-four"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Les quatre accords toltèques</h5>
+                                <p class="author">Don Miguel Ruiz</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.2/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="59">
+                            <div class="book-cover spirituality-bg">
+                                <i class="fas fa-alchimist"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">L'Alchimiste</h5>
+                                <p class="author">Paulo Coelho</p>
+                                <div class="rating">★★★★★ <span class="text-muted">(4.6/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="60">
+                            <div class="book-cover spirituality-bg">
+                                <i class="fas fa-man"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">The Celestine Prophecy</h5>
+                                <p class="author">James Redfield</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.1/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Ligne 3 -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="61">
+                            <div class="book-cover spirituality-bg">
+                                <i class="fas fa-buddha"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">The Art of Happiness</h5>
+                                <p class="author">Dalai Lama</p>
+                                <div class="rating">★★★★★ <span class="text-muted">(4.7/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="62">
+                            <div class="book-cover spirituality-bg">
+                                <i class="fas fa-new"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">The Power of Now</h5>
+                                <p class="author">Eckhart Tolle</p>
+                                <div class="rating">★★★★★ <span class="text-muted">(4.8/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="63">
+                            <div class="book-cover spirituality-bg">
+                                <i class="fas fa-mindful"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Wherever You Go, There You Are</h5>
+                                <p class="author">Jon Kabat-Zinn</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.2/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Onglet Santé -->
+            <div class="tab-pane fade" id="health" role="tabpanel">
+                <h3 class="category-title"><i class="fas fa-heartbeat me-2"></i>Livres sur la Santé</h3>
+                <div class="row">
+                    <!-- Ligne 1 -->
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="64">
+                            <div class="book-cover health-bg">
+                                <i class="fas fa-plant"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">How Not to Die</h5>
+                                <p class="author">Michael Greger</p>
+                                <div class="rating">★★★★★ <span class="text-muted">(4.7/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="65">
+                            <div class="book-cover health-bg">
+                                <i class="fas fa-blue"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">The Blue Zones</h5>
+                                <p class="author">Dan Buettner</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.3/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="66">
+                            <div class="book-cover health-bg">
+                                <i class="fas fa-immune"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">The Immune System Recovery Plan</h5>
+                                <p class="author">Susan Blum</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.1/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Ligne 2 -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="67">
+                            <div class="book-cover health-bg">
+                                <i class="fas fa-gut"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Gut</h5>
+                                <p class="author">Giulia Enders</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.2/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="68">
+                            <div class="book-cover health-bg">
+                                <i class="fas fa-sleep"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Why We Sleep</h5>
+                                <p class="author">Matthew Walker</p>
+                                <div class="rating">★★★★★ <span class="text-muted">(4.8/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="69">
+                            <div class="book-cover health-bg">
+                                <i class="fas fa-medical"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">The Medical Medium</h5>
+                                <p class="author">Anthony William</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.0/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Ligne 3 -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="70">
+                            <div class="book-cover health-bg">
+                                <i class="fas fa-mind"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">The Mind-Gut Connection</h5>
+                                <p class="author">Emeran Mayer</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.1/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="71">
+                            <div class="book-cover health-bg">
+                                <i class="fas fa-food"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Food Rules</h5>
+                                <p class="author">Michael Pollan</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.2/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card book-card" data-bs-toggle="modal" data-bs-target="#bookModal" data-book-id="72">
+                            <div class="book-cover health-bg">
+                                <i class="fas fa-longevity"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">The Longevity Diet</h5>
+                                <p class="author">Valter Longo</p>
+                                <div class="rating">★★★★☆ <span class="text-muted">(4.0/5)</span></div>
+                                <button class="btn btn-details btn-sm">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal pour les détails des livres -->
+    <div class="modal fade" id="bookModal" tabindex="-1" aria-labelledby="bookModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="bookModalLabel">Détails du livre</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <div class="book-cover-modal mb-3" id="modalBookCover" style="height: 200px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 4rem;">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="rating mb-2" id="modalRating">★★★★☆ <span class="text-muted">(4.2/5)</span></div>
+                            <span class="badge mb-3" id="modalCategory" style="background-color: #6a11cb;">Catégorie</span>
+                        </div>
+                        <div class="col-md-8">
+                            <h3 id="modalBookTitle">Titre du livre</h3>
+                            <p class="text-muted" id="modalAuthor">Auteur</p>
+                            
+                            <h5 class="mt-4">Résumé complet</h5>
+                            <p id="modalSummary">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor.</p>
+                            
+                            <h5 class="mt-4">Principales leçons</h5>
+                            <ul class="list-unstyled" id="modalLessons">
+                                <li class="lesson-item">Leçon importante numéro 1</li>
+                                <li class="lesson-item">Leçon importante numéro 2</li>
+                                <li class="lesson-item">Leçon importante numéro 3</li>
+                            </ul>
+                            
+                            <h5 class="mt-4">Cas d'usage et bonnes pratiques</h5>
+                            <div class="card practice-card mb-3" style="border-left-color: #6a11cb;">
+                                <div class="card-body">
+                                    <h6>Application professionnelle</h6>
+                                    <p id="modalProfessionalUse">Comment appliquer ces concepts dans votre carrière et vos projets professionnels.</p>
+                                </div>
+                            </div>
+                            <div class="card practice-card" style="border-left-color: #2575fc;">
+                                <div class="card-body">
+                                    <h6>Application personnelle</h6>
+                                    <p id="modalPersonalUse">Comment intégrer ces principes dans votre vie quotidienne pour une amélioration personnelle.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button type="button" class="btn btn-primary">Acheter ce livre</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-4 mt-5">
+        <div class="container">
+            <p>© 2023 Bibliothèque Premium. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Données des livres
+        const booksData = {
+            1: {
+                title: "Réfléchissez et devenez riche",
+                author: "Napoleon Hill",
+                category: "Succès",
+                categoryClass: "success-bg",
+                icon: "fas fa-trophy",
+                rating: "★★★★☆ (4.2/5)",
+                summary: "Ce classique intemporel révèle les secrets psychologiques du succès et de la richesse. Napoleon Hill a étudié pendant 20 ans les habitudes des personnes les plus riches de son époque pour en extraire des principes universels.",
+                lessons: [
+                    "Le pouvoir de la pensée positive et de la visualisation",
+                    "L'importance de la persistance face aux échecs",
+                    "Comment transformer le désir en réalité concrète",
+                    "Le principe de la mastermind (collaboration intelligente)"
+                ],
+                professionalUse: "Appliquez ces principes pour développer votre entreprise, augmenter vos revenus et créer des relations professionnelles fructueuses. La technique de la 'définition précise du but' est particulièrement efficace pour la planification stratégique.",
+                personalUse: "Utilisez les concepts de ce livre pour clarifier vos objectifs de vie, développer une mentalité d'abondance et surmonter les obstacles psychologiques qui vous empêchent d'avancer."
+            },
+            2: {
+                title: "Plus malin que le diable",
+                author: "Napoleon Hill",
+                category: "Succès",
+                categoryClass: "success-bg",
+                icon: "fas fa-chess-queen",
+                rating: "★★★★★ (4.8/5)",
+                summary: "Dans ce manuscrit longtemps caché, Napoleon Hill interviewe le Diable lui-même, révélant les pièges mentaux qui maintiennent les gens dans la médiocrité et comment les surmonter pour atteindre le succès.",
+                lessons: [
+                    "Les 7 principaux pièges qui maintiennent les gens dans l'échec",
+                    "Comment développer le courage de penser par soi-même",
+                    "L'importance de prendre des décisions fermes",
+                    "La technique pour neutraliser la peur sous toutes ses formes"
+                ],
+                professionalUse: "Identifiez et surmontez les peurs qui limitent votre progression professionnelle. Le concept de 'décision ferme' peut transformer votre approche des négociations et de la prise de risque calculée.",
+                personalUse: "Appliquez ces enseignements pour briser les habitudes autodestructrices, développer une confiance inébranlable et prendre le contrôle de votre destinée personnelle."
+            },
+            10: {
+                title: "This Is Marketing",
+                author: "Seth Godin",
+                category: "Marketing",
+                categoryClass: "marketing-bg",
+                icon: "fas fa-ad",
+                rating: "★★★★☆ (4.3/5)",
+                summary: "Seth Godin révolutionne l'approche du marketing moderne en mettant l'accent sur la création de valeur, la connexion émotionnelle et le service à une audience spécifique plutôt que sur la publicité intrusive.",
+                lessons: [
+                    "Le marketing comme service plutôt que comme interruption",
+                    "L'importance de cibler une niche spécifique",
+                    "Comment créer des produits qui résolvent de vrais problèmes",
+                    "Le pouvoir des histoires pour connecter avec votre audience"
+                ],
+                professionalUse: "Transformez votre approche marketing en vous concentrant sur des segments spécifiques du marché et en créant des messages qui parlent directement à leurs besoins profonds. La méthode 'Minimum Viable Audience' est particulièrement utile pour les startups.",
+                personalUse: "Appliquez les principes de marketing personnel pour développer votre marque professionnelle, mieux communiquer vos compétences et attirer les opportunités qui correspondent à vos valeurs."
+            },
+            19: {
+                title: "Petit éloge de la responsabilité",
+                author: "Sophie Chiche & Mark Samuel",
+                category: "Psychologie",
+                categoryClass: "psychology-bg",
+                icon: "fas fa-hands-helping",
+                rating: "★★★★☆ (4.2/5)",
+                summary: "Une exploration profonde de la responsabilité personnelle comme clé de la liberté et de l'épanouissement. Les auteurs montrent comment assumer pleinement sa vie conduit à plus de satisfaction et de réussite.",
+                lessons: [
+                    "La responsabilité comme source de pouvoir personnel",
+                    "Comment sortir du rôle de victime",
+                    "L'art de donner un feedback constructif",
+                    "Transformer les échecs en opportunités d'apprentissage"
+                ],
+                professionalUse: "Développez une culture de responsabilité dans votre équipe où chacun assume ses actions et contribue activement aux solutions. Les techniques de feedback proposées améliorent la communication professionnelle.",
+                personalUse: "Apprenez à reconnaître quand vous évitez la responsabilité dans votre vie personnelle et comment ce changement de perspective peut améliorer vos relations et votre bien-être."
+            },
+            28: {
+                title: "L'investisseur intelligent",
+                author: "Benjamin Graham",
+                category: "Finance",
+                categoryClass: "finance-bg",
+                icon: "fas fa-graduation-cap",
+                rating: "★★★★★ (4.8/5)",
+                summary: "Considéré comme la bible de l'investissement, ce livre enseigne la philosophie du 'value investing' qui cherche à minimiser les risques tout en maximisant les rendements à long terme.",
+                lessons: [
+                    "La différence entre investissement et spéculation",
+                    "Le concept de marge de sécurité",
+                    "Comment analyser les états financiers d'une entreprise",
+                    "L'importance de la discipline et de la patience en investissement"
+                ],
+                professionalUse: "Appliquez ces principes pour gérer le portefeuille de votre entreprise ou conseiller vos clients en matière d'investissements. La méthode d'analyse fondamentale est essentielle pour tout professionnel de la finance.",
+                personalUse: "Utilisez ces enseignements pour bâtir et gérer votre patrimoine financier personnel, en évitant les pièges émotionnels du marché et en vous concentrant sur la valeur intrinsèque."
+            },
+            37: {
+                title: "Atomic Habits",
+                author: "James Clear",
+                category: "Productivité",
+                categoryClass: "productivity-bg",
+                icon: "fas fa-atom",
+                rating: "★★★★★ (4.8/5)",
+                summary: "Une approche révolutionnaire pour créer de bonnes habitudes et éliminer les mauvaises, en se concentrant sur de petits changements progressifs qui conduisent à des résultats remarquables.",
+                lessons: [
+                    "La loi des petits gains marginaux (1% d'amélioration quotidienne)",
+                    "Comment concevoir votre environnement pour le succès",
+                    "La boucle des habitudes : signal, routine, récompense",
+                    "L'importance de l'identité dans le changement durable"
+                ],
+                professionalUse: "Implémentez des systèmes d'habitudes pour améliorer la productivité de votre équipe. La méthode des '2 minutes' pour démarrer de nouvelles routines est particulièrement efficace en milieu professionnel.",
+                personalUse: "Appliquez le cadre des 4 lois du changement de comportement pour développer des habitudes saines, rompre avec les comportements nuisibles et transformer progressivement votre vie."
+            },
+            46: {
+                title: "Les 7 habitudes",
+                author: "Stephen Covey",
+                category: "Leadership",
+                categoryClass: "leadership-bg",
+                icon: "fas fa-habits",
+                rating: "★★★★★ (4.8/5)",
+                summary: "Un guide complet pour développer l'efficacité personnelle et interpersonnelle, basé sur des principes intemporels qui mènent au succès durable et à l'épanouissement.",
+                lessons: [
+                    "Être proactif plutôt que réactif",
+                    "Commencer avec la fin en tête (avoir une vision claire)",
+                    "Donner la priorité aux priorités",
+                    "Penser gagnant-gagnant dans les relations"
+                ],
+                professionalUse: "Développez un leadership efficace en appliquant ces habitudes pour inspirer votre équipe, gérer votre temps stratégiquement et créer des synergies professionnelles.",
+                personalUse: "Transformez votre approche de la vie en intégrant ces principes dans vos relations familiales, votre développement personnel et votre gestion du temps quotidien."
+            },
+            55: {
+                title: "Le pouvoir du moment présent",
+                author: "Eckhart Tolle",
+                category: "Spiritualité",
+                categoryClass: "spirituality-bg",
+                icon: "fas fa-power",
+                rating: "★★★★★ (4.8/5)",
+                summary: "Un guide spirituel profond qui enseigne comment libérer son esprit des regrets du passé et des angoisses du futur pour trouver la paix et la satisfaction dans l'instant présent.",
+                lessons: [
+                    "L'identification et la transcendance de l'ego",
+                    "L'observation des pensées sans s'y identifier",
+                    "L'acceptation radicale de ce qui est",
+                    "La pratique de la présence dans les activités quotidiennes"
+                ],
+                professionalUse: "Appliquez ces principes pour réduire le stress au travail, améliorer la concentration et développer une communication plus consciente avec vos collègues et clients.",
+                personalUse: "Utilisez ces enseignements pour cultiver la paix intérieure, améliorer vos relations et apprécier pleinement chaque moment de la vie quotidienne."
+            },
+            64: {
+                title: "How Not to Die",
+                author: "Michael Greger",
+                category: "Santé",
+                categoryClass: "health-bg",
+                icon: "fas fa-plant",
+                rating: "★★★★★ (4.7/5)",
+                summary: "Basé sur des preuves scientifiques, ce livre révèle les aliments qui préviennent et renversent les principales causes de décès prématuré, offrant un guide complet pour une longue vie en bonne santé.",
+                lessons: [
+                    "Les 12 aliments quotidiens essentiels à la longévité",
+                    "Comment prévenir les maladies chroniques par l'alimentation",
+                    "Les bienfaits spécifiques des différents groupes d'aliments végétaux",
+                    "Des recommandations pratiques pour chaque repas de la journée"
+                ],
+                professionalUse: "Implémentez ces connaissances si vous travaillez dans le domaine de la santé, du bien-être ou de la restauration pour offrir des conseils nutritionnels fondés sur des preuves.",
+                personalUse: "Transformez votre santé en suivant les recommandations alimentaires détaillées, en apprenant à choisir les aliments les plus nutritifs et en comprenant leur impact sur votre corps."
+            }
+        };
+
+        // Animation au chargement de la page
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.book-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.add('show');
+                }, 100 * index);
+            });
+            
+            // Configuration du modal
+            const bookModal = document.getElementById('bookModal');
+            bookModal.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget;
+                const bookId = button.getAttribute('data-book-id');
+                const bookData = booksData[bookId];
+                
+                document.getElementById('modalBookTitle').textContent = bookData.title;
+                document.getElementById('modalAuthor').textContent = bookData.author;
+                document.getElementById('modalRating').innerHTML = bookData.rating;
+                document.getElementById('modalSummary').textContent = bookData.summary;
+                
+                const lessonsList = document.getElementById('modalLessons');
+                lessonsList.innerHTML = '';
+                bookData.lessons.forEach(lesson => {
+                    const li = document.createElement('li');
+                    li.className = 'lesson-item';
+                    li.textContent = lesson;
+                    lessonsList.appendChild(li);
+                });
+                
+                document.getElementById('modalProfessionalUse').textContent = bookData.professionalUse;
+                document.getElementById('modalPersonalUse').textContent = bookData.personalUse;
+                
+                const cover = document.getElementById('modalBookCover');
+                cover.className = `book-cover-modal mb-3 ${bookData.categoryClass}`;
+                cover.innerHTML = `<i class="${bookData.icon}"></i>`;
+                
+                const badge = document.getElementById('modalCategory');
+                badge.textContent = bookData.category;
+                badge.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue(`--${bookData.category.toLowerCase()}-color`);
+            });
+        });
+    </script>
+</body>
+</html>
