@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bibliothèque Premium - Livres de développement personnel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+		:root {
+			--primary-color: #007bff;
+			--secondary-color: #6c757d;
+			--accent-color: #16a085;  /* Cette couleur est utilisée pour le fond actif */
+		}
+        
+        body {
+            background-color: #f9f9f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background-color: var(--primary-color);
+            padding: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .navbar-brand {
+            color: white !important;
+            font-weight: bold;
+            font-size: 1.8rem;
+        }
+        .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, 0.7) !important;
+            margin-right: 15px;
+            font-size: 1.1rem;
+        }
+        .navbar-nav .nav-link:hover {
+            color: white !important;
+        }
+
+        .hero-section {
+            background: linear-gradient(to right, #007bff, #0056b3); /* Dégradé bleu */
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .hero-section h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        .hero-section p {
+            font-size: 1.4rem;
+            max-width: 800px;
+            margin: 0 auto 30px auto;
+        }
+
+        .category-filter {
+            background-color: #e9ecef;
+            padding: 15px 0;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            overflow-x: auto; /* Allow horizontal scroll for many buttons */
+            white-space: nowrap; /* Keep buttons in one line */
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+            padding-bottom: 5px; /* Adjust padding for scrollbar */
+        }
+        .category-filter .btn {
+            margin: 5px;
+            font-size: 1.0rem; /* Slightly smaller font for more buttons */
+            padding: 8px 18px; /* Slightly smaller padding */
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            display: inline-block; /* Ensure buttons stay inline */
+        }
+        .category-filter .btn-secondary {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            color: white;
+        }
+        .category-filter .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+        .category-filter .btn.active {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .book-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%; /* Ensure cards have equal height */
+            display: flex;
+            flex-direction: column;
+        }
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        .book-card .card-body {
+            padding: 25px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .book-card .card-title {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        .book-card .card-subtitle {
+            font-size: 1.1rem;
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+        }
+        .book-card .book-rating {
+            color: #ffc107; /* Or gold color for stars */
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        .book-card .book-summary {
+            font-size: 1rem;
+            color: #555;
+            flex-grow: 1; /* Allows summary to take up available space */
+        }
+        .book-card .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            margin-top: 20px;
+            padding: 10px 25px;
+            border-radius: 5px;
+            font-size: 1.05rem;
+            transition: background-color 0.3s ease;
+        }
+        .book-card .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        .book-cover {
+            height: 120px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            margin-bottom: 15px;
+        }
+        /* Category specific colors (add more as needed) */
+        .productivity-cover { background-color: #f39c12; } /* Orange */
+        .mindset-cover { background-color: #9b59b6; }      /* Purple */
+        .financepersonnelle-cover { background-color: #27ae60; } /* Green */
+        .relations-cover { background-color: #e74c3c; } /* Red */
+        .santeetbienetre-cover { background-color: #3498db; } /* Blue */
+        .communication-cover { background-color: #1abc9c; } /* Turquoise */
+        .creativity-cover { background-color: #d35400; } /* Pumpkin */
+        .leadership-cover { background-color: #8e44ad; } /* Amethyst */
+        .marketingetventes-cover { background-color: #2ecc71; } /* Emerald */
+        .innovationetstartup-cover { background-color: #e67e22; } /* Carrot */
+
+
+        /* Category badges */
+        .badge {
+            font-size: 0.9rem;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-weight: normal;
+            margin-top: 10px;
+            display: inline-block; /* To allow margin-top to work */
+        }
+
+        /* Modal specific styles */
+        .modal-header {
+            background-color: var(--primary-color);
+            color: white;
+            border-bottom: none;
+            padding: 20px;
+        }
+        .modal-title {
+            font-size: 2rem;
+            font-weight: 600;
+        }
+        .modal-body {
+            padding: 30px;
+            font-size: 1.1rem;
+            color: #444;
+        }
+        .modal-body h5 {
+            font-size: 1.4rem;
+            color: var(--primary-color);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        .modal-body ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .modal-body ul li {
+            margin-bottom: 8px;
+            padding-left: 25px;
+            position: relative;
+        }
+        .modal-body ul li:before {
+            content: "\f00c"; /* Check icon */
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+        }
+        .modal-footer {
+            border-top: none;
+            padding: 15px 30px;
+        }
+        .book-cover-modal {
+            height: 150px;
+            width: 150px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            color: white;
+            margin: 0 auto 20px auto; /* Center the cover in modal */
+        }
+
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+            font-size: 1rem;
+        }
+        footer .social-icons a {
+            color: white;
+            font-size: 1.5rem;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+        footer .social-icons a:hover {
+            color: var(--accent-color);
+        }
+        footer p {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Bibliothèque Premium</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Livres</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">À Propos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero-section">
+        <div class="container">
+            <h1>Découvrez Votre Prochain Livre Inspirant</h1>
+            <p class="lead">Plongez dans notre collection de livres de développement personnel soigneusement sélectionnés pour vous aider à atteindre votre plein potentiel.</p>
+        </div>
+    </section>
+
+    <section class="category-filter">
+        <div class="container text-center">
+            <button class="btn btn-secondary active" data-category="all">Toutes les Catégories</button>
+            <button class="btn btn-secondary" data-category="productivity">Productivité</button>
+            <button class="btn btn-secondary" data-category="mindset">Mindset</button>
+            <button class="btn btn-secondary" data-category="financepersonnelle">Finance Personnelle</button>
+            <button class="btn btn-secondary" data-category="relations">Relations</button>
+            <button class="btn btn-secondary" data-category="santeetbienetre">Santé & Bien-être</button>
+            <button class="btn btn-secondary" data-category="communication">Communication</button>
+            <button class="btn btn-secondary" data-category="creativity">Créativité</button>
+            <button class="btn btn-secondary" data-category="leadership">Leadership</button>
+            <button class="btn btn-secondary" data-category="marketingetventes">Marketing & Ventes</button>
+            <button class="btn btn-secondary" data-category="innovationetstartup">Innovation & Startup</button>
+        </div>
+    </section>
+
+    <section class="books-grid">
+        <div class="container">
+            <div class="row" id="booksContainer">
+                </div>
+        </div>
+    </section>
+
+    <div class="modal fade" id="bookDetailModal" tabindex="-1" aria-labelledby="bookDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle"></h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center">
+                        <div id="modalBookCover" class="book-cover-modal mb-3"></div>
+                        <p class="h6 text-muted" id="modalAuthor"></p>
+                        <div class="book-rating" id="modalRating"></div>
+                        <span class="badge" id="modalCategory"></span>
+                    </div>
+                    <hr>
+                    <h5>Résumé du Livre</h5>
+                    <p id="modalSummary"></p>
+                    <h5>Leçons Clés</h5>
+                    <ul id="modalLessons"></ul>
+                    <h5>Utilisation Professionnelle</h5>
+                    <p id="modalProfessionalUse"></p>
+                    <h5>Utilisation Personnelle</h5>
+                    <p id="modalPersonalUse"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Bibliothèque Premium. Tous droits réservés.</p>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const books = [
+            // --- PRODUCTIVITÉ (9 Livres Détaillés) ---
+            {
+                id: 1,
+                title: "L'art de la productivité atomique",
+                author: "James Clear",
+                rating: "★★★★★",
+                summary: "Ce livre révolutionnaire décortique les principes fondamentaux de la productivité et de la création d'habitudes durables. Il explique comment de petits changements quotidiens, appelés 'habitudes atomiques', peuvent entraîner des résultats massifs et transformateurs au fil du temps. L'auteur propose des stratégies concrètes pour construire de bonnes habitudes, se débarrasser des mauvaises et maîtriser les comportements qui mènent au succès à long terme en se basant sur une approche scientifique et pragmatique.\n\nClair et concis, ce guide offre des frameworks actionnables et des exemples pertinents qui rendent la science du comportement accessible à tous. C'est une lecture essentielle pour quiconque cherche à optimiser son efficacité personnelle et professionnelle en comprenant la science derrière la formation des habitudes, et en l'appliquant pour créer des systèmes qui garantissent le progrès constant, même imperceptible au jour le jour.",
+                lessons: [
+                    "Les petites améliorations constantes mènent à des résultats extraordinaires. Le concept de l'amélioration de 1% chaque jour peut transformer radicalement votre vie sur le long terme par l'effet cumulé des gains marginaux.",
+                    "La formation d'habitudes est régie par quatre lois : rendre les habitudes évidentes, attrayantes, faciles et satisfaisantes. Appliquer ces lois simplifie grandement l'adoption de nouveaux comportements et la suppression des habitudes indésirables.",
+                    "Il est crucial de se concentrer sur le système plutôt que sur les objectifs. Un bon système garantit que les objectifs sont atteints naturellement en améliorant les processus et les comportements quotidiens, plutôt que de se focaliser uniquement sur le résultat final.",
+                    "L'identité est au cœur du changement de comportement : devenez le type de personne qui réalise les actions souhaitées. Changer qui vous croyez être est plus puissant que de changer ce que vous faites, car cela modifie la source de vos motivations et actions.",
+                    "L'environnement joue un rôle prépondérant. Aménagez votre espace pour favoriser les bonnes habitudes et rendre les mauvaises plus difficiles à suivre, en créant des signaux clairs et des barrières pour les comportements indésirables. Un environnement bien conçu est un allié puissant.",
+                    "La règle des '2 minutes' aide à démarrer n'importe quelle nouvelle habitude, même complexe, en la réduisant à une action réalisable en moins de deux minutes. Cela réduit la friction initiale et rend le démarrage irrésistible."
+                ],
+                professionalUse: "Idéal pour les managers et les équipes souhaitant mettre en place des workflows plus efficaces, encourager une culture de l'amélioration continue et de la discipline collective. Il aide à structurer les tâches, à réduire la procrastination individuelle et collective, et à développer des routines de travail plus saines et productives. Les principes peuvent être appliqués pour améliorer la gestion de projet en décomposant les grandes tâches en petites étapes gérables, l'atteinte des objectifs d'équipe par des rituels quotidiens, et la formation de compétences clés chez les employés en facilitant l'intégration de nouvelles pratiques et protocoles.",
+                personalUse: "Parfait pour quiconque souhaite améliorer sa discipline personnelle, atteindre des objectifs de santé, d'apprentissage ou financiers. Il offre des outils pratiques pour arrêter les mauvaises habitudes (comme la procrastination, la surconsommation de réseaux sociaux ou une alimentation déséquilibrée) et enraciner de nouvelles habitudes positives (comme la lecture quotidienne, l'exercice régulier, l'épargne systématique ou l'apprentissage d'une nouvelle langue). Ce livre vous donne une feuille de route claire pour transformer vos aspirations en actions quotidiennes, menant à un bien-être général accru et à la réalisation progressive et durable de vos rêves personnels, rendant le processus agréable et moins intimidant.",
+                category: "Productivité",
+                categoryClass: "productivity-cover",
+                icon: "fas fa-tasks"
+            },
+            {
+                id: 2,
+                title: "Getting Things Done (GTD)",
+                author: "David Allen",
+                rating: "★★★★★",
+                summary: "David Allen présente une méthodologie de gestion du temps et des tâches qui vise à libérer l'esprit des préoccupations en capturant, clarifiant, organisant et engageant les actions dans un système fiable. Le principe central est de vider son esprit de toutes les pensées non traitées pour atteindre une 'mind like water' – un état de clarté et de réactivité face à tout ce qui se présente. GTD ne se contente pas de lister des tâches ; il propose une approche globale pour gérer le flux d'informations et d'engagements de manière structurée et sans stress.\n\nCe livre est un système complet qui transforme la façon dont vous interagissez avec vos obligations, vos idées et vos objectifs. Il apprend à transformer les incertitudes en actions concrètes, à établir des priorités en fonction du contexte et de l'énergie disponible, et à créer un environnement où l'on peut se concentrer pleinement sur la tâche à accomplir, sans être distrait par les rappels internes ou le sentiment d'être dépassé. C'est un guide indispensable pour maîtriser son flux de travail et sa charge mentale.",
+                lessons: [
+                    "Le principe fondamental est de capturer tout ce qui retient votre attention dans une 'boîte de réception' externe, qu'il s'agisse de tâches, d'idées ou de préoccupations, pour libérer votre esprit.",
+                    "Chaque élément capturé doit être clarifié : est-ce actionnable ? Si oui, quelle est la prochaine action physique concrète ? Sinon, archivez, jetez ou mettez en veille.",
+                    "Organisez les prochaines actions par contexte (à la maison, au bureau, appels, ordinateur) et les projets par leur résultat désiré. Cela facilite l'exécution rapide et la réduction du stress lié à l'organisation.",
+                    "Faites des revues régulières de votre système (hebdomadaires, quotidiennes) pour maintenir la clarté et la pertinence de vos listes, s'assurer que rien n'est oublié et ajuster les priorités.",
+                    "La 'règle des deux minutes' : si une tâche prend moins de deux minutes, faites-la immédiatement. Cela réduit l'encombrement des petites tâches qui s'accumulent et créent de la friction.",
+                    "Adoptez une approche orientée 'projets'. Tout ce qui nécessite plus d'une action est un projet. Définir le résultat final et les prochaines actions pour chaque projet permet d'avancer systématiquement vers les objectifs."
+                ],
+                professionalUse: "Essentiel pour les professionnels de tous niveaux, des dirigeants aux employés individuels, qui sont submergés par un flux constant d'e-mails, de réunions et de tâches. GTD fournit un cadre robuste pour gérer la complexité, prioriser efficacement et améliorer la réactivité. Il aide à déléguer plus clairement, à mener des réunions plus productives, et à réduire le stress lié à la gestion de multiples projets. L'adoption de GTD au niveau de l'équipe peut améliorer la collaboration, la transparence et la performance globale, en assurant que tout le monde sait sur quoi travailler et quand, et en minimisant les retards dus à l'oubli ou à la confusion des tâches.",
+                personalUse: "Transforme la gestion de la vie quotidienne. GTD aide à organiser les finances personnelles, les projets domestiques, les rendez-vous, les listes de courses et même les idées pour des hobbies ou des vacances. Il permet de réduire l'anxiété liée à l'oubli de choses importantes et de libérer de l'espace mental pour des activités plus créatives ou relaxantes. En appliquant ses principes, on peut mieux équilibrer vie professionnelle et vie personnelle, se sentir plus en contrôle de son temps et de ses engagements, et finalement, profiter d'une plus grande sérénité au quotidien, en sachant que tout est sous contrôle ou capturé dans un système fiable.",
+                category: "Productivité",
+                categoryClass: "productivity-cover",
+                icon: "fas fa-clipboard-check"
+            },
+            {
+                id: 3,
+                title: "Deep Work: Concentrez-vous pour réussir dans un monde distrait",
+                author: "Cal Newport",
+                rating: "★★★★★",
+                summary: "Cal Newport argumente que la capacité à se concentrer profondément sur des tâches exigeantes est devenue une compétence rare et précieuse dans notre économie de la connaissance, souvent submergée par les distractions. Il définit le 'travail profond' comme des activités professionnelles effectuées dans un état de concentration sans distraction, qui poussent nos capacités cognitives à leurs limites et créent une nouvelle valeur. À l'inverse, le 'travail superficiel' (répondre aux e-mails, gérer les réseaux sociaux) est facile à reproduire et ne génère que peu de valeur.\n\nCe livre ne se contente pas de théoriser ; il propose des stratégies concrètes et des routines pour intégrer le travail profond dans sa vie, en minimisant les interruptions et en entraînant son cerveau à des périodes de concentration intense. Newport remet en question la culture du multitâche et de la connectivité constante, et offre un plan pour reprendre le contrôle de son attention et exceller dans un environnement saturé d'informations, conduisant à une productivité accrue et à une satisfaction professionnelle plus profonde.",
+                lessons: [
+                    "Le travail profond est la clé de l'excellence et de la production de valeur dans l'économie de la connaissance. Il est crucial de le prioriser par rapport aux tâches superficielles pour développer des compétences complexes et créer des résultats significatifs.",
+                    "Les distractions sont l'ennemi de la concentration. Il est essentiel de mettre en place des stratégies (bloqueurs de notifications, périodes de déconnexion) pour minimiser les interruptions et préserver son attention.",
+                    "Différentes philosophies de travail profond existent (monastique, bimodal, rythmique, journalistique) ; trouvez celle qui correspond le mieux à votre style de vie et à vos exigences professionnelles.",
+                    "La planification est fondamentale pour le travail profond. Allouez des blocs de temps spécifiques à la concentration intense et traitez ces blocs comme des rendez-vous incompressibles avec vous-même.",
+                    "Adoptez la 'discipline de la fin' : une fois qu'une tâche est terminée, arrêtez de travailler. Cela renforce la motivation pour des sessions de travail profond et prévient l'épuisement, en signalant au cerveau que le repos est mérité.",
+                    "La récupération est aussi importante que le travail. Prenez des pauses intentionnelles et déconnectez-vous pour permettre à votre esprit de se ressourcer et de consolider les informations, ce qui améliore la performance globale."
+                ],
+                professionalUse: "Indispensable pour les développeurs, les chercheurs, les écrivains, les designers, et tout professionnel dont le métier exige de la réflexion complexe et de la résolution de problèmes. Il aide à structurer sa journée pour maximiser les périodes de concentration, à réduire la dépendance aux e-mails et aux outils de collaboration intrusifs, et à produire des livrables de haute qualité plus rapidement. Pour les managers, il offre des insights pour créer un environnement de travail qui favorise la concentration des équipes, la créativité et l'innovation, en évitant les pièges d'une connectivité excessive et de réunions improductives. C'est un atout pour améliorer la prise de décision stratégique et la performance intellectuelle.",
+                personalUse: "Transforme la façon dont on aborde l'apprentissage, les hobbies et la gestion du temps personnel. Il encourage à des périodes de concentration sans distraction pour la lecture, l'apprentissage d'une nouvelle compétence, ou la pratique d'un instrument. Il aide à réduire le temps passé sur des activités peu profondes (réseaux sociaux, télévision) au profit d'activités plus enrichissantes qui contribuent à l'épanouissement personnel. En appliquant ses principes, on peut retrouver un sentiment de contrôle sur son attention, réduire le stress lié à la surcharge d'informations, et cultiver une vie personnelle plus riche et plus significative, en ayant plus de temps et d'énergie pour ce qui compte vraiment.",
+                category: "Productivité",
+                categoryClass: "productivity-cover",
+                icon: "fas fa-brain"
+            },
+            {
+                id: 4,
+                title: "La méthode agile pour votre vie",
+                author: "J.D. Meier",
+                rating: "★★★★☆",
+                summary: "Ce livre adapte les principes agiles, initialement conçus pour le développement logiciel, à la gestion de la vie quotidienne et des projets personnels. L'auteur propose une approche itérative et flexible pour planifier, exécuter et ajuster ses objectifs, en mettant l'accent sur la livraison de valeur continue et l'adaptabilité face au changement. Plutôt que des plans rigides, la méthode agile encourage des cycles courts de travail ('sprints'), des revues régulières et une capacité à pivoter rapidement lorsque de nouvelles informations apparaissent.\n\nIl enseigne à identifier ses priorités, à décomposer les grands objectifs en petites tâches gérables et à mesurer ses progrès de manière concrète. Ce manuel est idéal pour ceux qui se sentent bloqués par des méthodes de planification traditionnelles trop lourdes ou qui ont du mal à s'adapter aux imprévus. C'est un guide pour une vie plus fluide, moins stressante et plus réactive, où l'on apprend à 'échouer vite' pour mieux apprendre et s'ajuster, et où la flexibilité devient une force plutôt qu'une faiblesse.",
+                lessons: [
+                    "Adoptez des cycles de travail courts et itératifs ('sprints') pour progresser rapidement sur vos objectifs et obtenir un feedback précoce, plutôt que de planifier sur de longues périodes sans ajustements.",
+                    "Priorisez constamment vos tâches et vos projets en fonction de la valeur qu'ils apportent et de l'alignement avec vos objectifs à long terme, en réévaluant régulièrement ce qui est le plus important.",
+                    "Soyez adaptable et ouvert au changement. La vie est imprévisible, et la capacité à pivoter et à ajuster ses plans est plus importante que la fidélité à un plan initial rigide.",
+                    "Visualisez votre travail et vos progrès sur un tableau Kanban ou similaire. Cela offre une vue d'ensemble claire de ce qui est en cours, ce qui est fait et ce qui reste à faire, facilitant le suivi.",
+                    "Faites des revues régulières (quotidiennes, hebdomadaires) de vos progrès et de vos apprentissages. Ces rétrospectives permettent d'identifier ce qui fonctionne, ce qui ne fonctionne pas, et d'améliorer continuellement votre processus.",
+                    "Concentrez-vous sur la livraison de 'valeur' à intervalles réguliers. Chaque sprint ou cycle doit aboutir à quelque chose de tangible et d'utile, même si ce n'est qu'une petite avancée vers un objectif plus grand."
+                ],
+                professionalUse: "Excellent pour les managers d'équipes projet, les entrepreneurs et les professionnels indépendants qui gèrent de multiples initiatives. Il permet de transformer des processus de travail lourds en flux plus légers et réactifs, d'améliorer la collaboration d'équipe en favorisant la transparence et la communication fréquente, et d'accélérer la livraison de projets. Il est particulièrement utile pour les environnements de travail dynamiques où les exigences changent souvent, permettant aux équipes de s'adapter rapidement aux nouvelles priorités du marché ou des clients. Il aide également à mieux estimer les efforts et à gérer les attentes des parties prenantes.",
+                personalUse: "Idéal pour gérer des projets personnels complexes comme l'organisation d'un mariage, l'apprentissage d'une nouvelle compétence, la planification d'un voyage ou la gestion d'un budget. Il aide à ne pas se sentir dépassé par l'ampleur des tâches, en les décomposant et en avançant par petits pas. Il encourage l'expérimentation et l'auto-correction, rendant le processus moins stressant et plus agréable. Cette méthode permet de mieux gérer les imprévus de la vie quotidienne, de rester motivé en voyant des progrès constants, et d'atteindre des objectifs personnels qui semblaient auparavant insurmontables, en adoptant une approche flexible et itérative de la vie.",
+                category: "Productivité",
+                categoryClass: "productivity-cover",
+                icon: "fas fa-lightbulb"
+            },
+            {
+                id: 5,
+                title: "Zen to Done (ZTD)",
+                author: "Leo Babauta",
+                rating: "★★★★☆",
+                summary: "Zen to Done est une approche simplifiée et humanisée de la productivité, conçue par Leo Babauta du célèbre blog 'Zen Habits'. C'est une critique des systèmes de productivité complexes et souvent intimidants, proposant plutôt de se concentrer sur un petit nombre d'habitudes clés à la fois, avec un accent sur la simplicité et la régularité plutôt que sur la perfection. ZTD intègre des éléments des meilleures méthodes de productivité (comme GTD) mais les rend plus accessibles et moins rigides, en se focalisant sur la réduction du stress et l'amélioration du bien-être.\n\nCe livre met l'accent sur dix habitudes essentielles, comme la collecte rapide des idées, la planification des 'grosses pierres' (tâches importantes) et l'exécution d'une tâche à la fois. Il offre une voie moins contraignante vers la productivité pour ceux qui ont été découragés par des systèmes trop complexes. ZTD est un appel à la conscience, à la concentration sur l'essentiel et à la création d'un système qui fonctionne *pour* vous, plutôt que de vous imposer une charge mentale supplémentaire. C'est une philosophie de vie minimaliste appliquée à la productivité, promouvant la paix intérieure et l'efficacité tranquille.",
+                lessons: [
+                    "Concentrez-vous sur l'acquisition d'une seule habitude de productivité à la fois, en la maîtrisant avant d'en ajouter une nouvelle. La simplicité et la cohérence l'emportent sur la complexité et l'abandon.",
+                    "La 'capture' rapide des idées et des tâches dans un seul endroit fiable est fondamentale pour vider votre esprit et ne rien oublier. Utilisez des outils simples comme un carnet ou une application de notes.",
+                    "Planifiez vos trois 'grosses pierres' (tâches les plus importantes) pour la journée au début de chaque matinée. Cela assure que l'essentiel est fait, même si le reste de la journée est perturbé.",
+                    "Faites une seule tâche à la fois. Le multitâche est une illusion qui réduit l'efficacité et augmente le stress. Concentrez-vous pleinement sur ce qui est devant vous avant de passer à autre chose.",
+                    "Le traitement des informations doit être rapide et décisif : agissez, déléguez, reportez ou archivez/jetez. Évitez de laisser les choses traîner ou de les examiner plusieurs fois sans décision.",
+                    "Faites une revue hebdomadaire simple de vos progrès et de vos plans pour rester sur la bonne voie, sans la rigidité d'une revue GTD complète. L'objectif est la clarté et le réalignement."
+                ],
+                professionalUse: "Excellent pour les professionnels débordés qui cherchent à simplifier leur workflow et à réduire le stress au travail. ZTD aide à éliminer le bruit, à se concentrer sur les tâches à forte valeur ajoutée, et à maintenir un sentiment de calme même sous pression. Il est particulièrement utile pour ceux qui trouvent les méthodes de gestion de projet traditionnelles trop rigides ou chronophages. Il permet de mieux gérer les interruptions, les e-mails entrants et les priorités fluctuantes, favorisant une approche plus sereine et plus intentionnelle du travail quotidien. Les équipes peuvent adopter ses principes pour des réunions plus courtes, des communications plus claires et une meilleure focalisation sur les objectifs partagés.",
+                personalUse: "Un guide parfait pour les individus qui veulent retrouver un équilibre dans leur vie personnelle et réduire l'encombrement mental. Il propose des stratégies pour simplifier les routines quotidiennes, gérer les tâches ménagères, les rendez-vous personnels et les finances sans se sentir dépassé. Il encourage à se concentrer sur ce qui compte vraiment, à éliminer les activités superflues et à créer plus de temps pour les loisirs, la famille et le repos. ZTD aide à cultiver la pleine conscience et la satisfaction dans la vie de tous les jours, en transformant la productivité d'une corvée en une pratique apaisante qui soutient un mode de vie plus intentionnel et serein.",
+                category: "Productivité",
+                categoryClass: "productivity-cover",
+                icon: "fas fa-leaf"
+            },
+            {
+                id: 6,
+                title: "L'art de la simplicité : La psychologie pour une vie meilleure",
+                author: "Dominique Loreau",
+                rating: "★★★★☆",
+                summary: "Bien que n'étant pas un livre de productivité au sens traditionnel, 'L'art de la simplicité' promeut une approche de vie minimaliste qui a des implications profondes sur la productivité en réduisant le désordre et les distractions. Dominique Loreau, inspirée par la culture japonaise, nous invite à désencombrer non seulement notre espace physique mais aussi notre esprit, nos relations et notre emploi du temps. Elle soutient qu'en se débarrassant du superflu, on crée de l'espace pour ce qui est essentiel, ce qui permet de mieux se concentrer et d'être plus efficace. Le livre aborde la simplicité dans toutes ses dimensions : vestimentaire, alimentaire, financière, et bien sûr, organisationnelle.\n\nIl ne s'agit pas seulement d'ordonner, mais de faire des choix conscients sur ce que l'on possède, ce que l'on fait et avec qui l'on passe son temps. En réduisant la complexité, on libère du temps et de l'énergie mentale qui peuvent être redirigés vers des tâches et des objectifs plus significatifs. C'est un manifeste pour une vie plus légère, plus intentionnelle et, par extension, plus productive, en éliminant les sources de friction et de distraction qui encombrent notre quotidien et notre esprit. La vraie productivité, selon Loreau, vient d'un esprit clair et d'un environnement épuré.",
+                lessons: [
+                    "Désencombrez votre espace physique pour désencombrer votre esprit. Un environnement ordonné réduit les distractions visuelles et mentales, facilitant la concentration et la clarté de pensée.",
+                    "Simplifiez vos possessions. Moins vous avez d'objets, moins vous avez de choses à gérer, à nettoyer, à réparer ou à organiser, ce qui libère du temps et de l'énergie pour des activités plus importantes.",
+                    "Faites des choix intentionnels concernant votre temps et vos engagements. Apprenez à dire non aux choses qui ne correspondent pas à vos priorités et à vos valeurs, afin de mieux protéger votre énergie.",
+                    "Adoptez une approche minimaliste dans tous les aspects de votre vie (alimentation, habillement, finances) pour réduire la complexité et les décisions inutiles, et ainsi dégager de la bande passante mentale.",
+                    "La qualité l'emporte sur la quantité. Possédez moins, mais possédez des objets de meilleure qualité qui durent et qui vous apportent plus de joie, réduisant ainsi le besoin de constamment remplacer ou acheter.",
+                    "Pratiquez la pleine conscience et la réflexion sur ce qui est réellement essentiel pour vous. Ce processus de clarification permet d'aligner vos actions quotidiennes avec vos objectifs profonds, rendant votre productivité plus significative."
+                ],
+                professionalUse: "Bénéfique pour les professionnels cherchant à simplifier leurs processus de travail, à organiser leur bureau physique et numérique, et à gérer plus efficacement leur temps. Il encourage à se débarrasser des tâches superflues, des réunions inutiles et des documents numériques accumulés qui nuisent à la concentration. Pour les managers, il incite à promouvoir une culture d'entreprise plus axée sur l'essentiel, à réduire la bureaucratie et à encourager les employés à se concentrer sur les tâches à forte valeur ajoutée. L'adoption de ces principes peut mener à des environnements de travail plus calmes, plus organisés et, par conséquent, plus productifs, où les décisions sont plus claires et les efforts mieux ciblés.",
+                personalUse: "Un guide transformateur pour quiconque aspire à une vie moins stressante, moins matérialiste et plus sereine. Il aide à désencombrer sa maison, ses pensées et ses engagements sociaux, créant un espace pour la paix intérieure et les activités enrichissantes. Le livre incite à réévaluer ses priorités, à cultiver la gratitude pour ce que l'on a et à trouver le bonheur dans la simplicité. En appliquant ses leçons, on peut réduire la consommation superflue, gérer son budget avec plus de conscience, et finalement, vivre une vie plus intentionnelle et épanouissante, en se libérant du fardeau de l'excès et en trouvant la joie dans l'essentiel.",
+                category: "Productivité",
+                categoryClass: "productivity-cover",
+                icon: "fas fa-heart"
+            },
+            {
+                id: 7,
+                title: "L'organisation pour tous: Transformer le Chaos en Clarté",
+                author: "Marie Kondo",
+                rating: "★★★★★",
+                summary: "Bien que Marie Kondo soit célèbre pour sa méthode de rangement 'KonMari', son livre va bien au-delà de la simple organisation physique. Il explore la philosophie derrière le désencombrement, en se concentrant sur la question fondamentale : 'Est-ce que cela suscite de la joie ?' (Does it spark joy?). Ce n'est pas une question de minimalisme extrême, mais de créer un environnement qui soutient votre bonheur et votre productivité. Kondo propose un processus unique de tri par catégorie, plutôt que par pièce, et insiste sur l'importance de visualiser le style de vie idéal que l'on souhaite mener. Elle révèle comment le désordre physique est souvent le reflet d'un désordre mental ou émotionnel, et comment l'acte de ranger peut être une forme de thérapie.\n\nLe livre offre des conseils pratiques sur la façon de plier les vêtements, d'organiser les livres et les papiers, et de traiter les objets sentimentaux, mais surtout, il enseigne une approche transformative de la relation avec ses possessions. En triant ses affaires une fois pour toutes, selon la méthode Kondo, on établit un nouveau standard d'ordre et de clarté qui se répercute positivement sur tous les aspects de la vie. C'est une invitation à un mode de vie plus intentionnel, où chaque objet a une place et un but, libérant ainsi de l'énergie pour des activités plus productives et épanouissantes.",
+                lessons: [
+                    "Rangez par catégorie, pas par emplacement. Rassemblez tous les objets d'une même catégorie (vêtements, livres, papiers, etc.) et traitez-les en une seule fois pour avoir une vue d'ensemble de ce que vous possédez.",
+                    "La question 'Est-ce que cela suscite de la joie ?' est le critère ultime pour décider si un objet doit être conservé. Cela encourage une connexion émotionnelle et intentionnelle avec ses possessions.",
+                    "Visualisez votre style de vie idéal et votre environnement souhaité avant de commencer à ranger. Avoir une vision claire de l'objectif final guide le processus de désencombrement et d'organisation.",
+                    "Le rangement doit être un événement unique et transformateur, pas un processus continu. Une fois que vous avez rangé 'à fond', il est plus facile de maintenir l'ordre et d'éviter l'accumulation future.",
+                    "Apprenez à remercier les objets avant de vous en débarrasser. Cela permet de lâcher prise avec gratitude et respect, facilitant le processus émotionnel de désencombrement.",
+                    "Donnez une place à chaque chose et remettez chaque chose à sa place. Une fois l'ordre établi, la maintenance devient simple et rapide, et votre environnement reste propice à la concentration et à la productivité."
+                ],
+                professionalUse: "Bien que souvent associé à la maison, les principes de Kondo peuvent être appliqués au bureau pour améliorer l'efficacité et la clarté. Organiser son espace de travail physique (bureau, tiroirs) et numérique (fichiers, e-mails) en ne gardant que ce qui est essentiel et 'suscite de la joie' (ou est utile et pertinent) peut réduire le stress, les distractions et le temps perdu à chercher des informations. Pour les équipes, cela peut inspirer des sessions de désencombrement de l'espace de travail partagé ou des dossiers de projet, menant à une meilleure collaboration et à une réduction de la surcharge d'informations. Un environnement de travail ordonné favorise une pensée plus claire et une productivité accrue, en éliminant le chaos visuel et mental.",
+                personalUse: "Fondamental pour quiconque souhaite améliorer son environnement domestique et, par extension, son bien-être mental. Ce livre ne se limite pas au rangement ; il invite à une réflexion profonde sur ce qui est important dans sa vie. En désencombrant, on libère non seulement de l'espace physique, mais aussi de l'énergie mentale et émotionnelle. Il aide à réduire l'anxiété liée au désordre, à mieux gérer son temps et ses ressources, et à cultiver un mode de vie plus conscient et intentionnel. En fin de compte, l'approche de Kondo mène à une maison plus paisible, un esprit plus serein et une capacité accrue à se concentrer sur les activités qui apportent véritablement de la joie et de l'accomplissement personnel.",
+                category: "Productivité",
+                categoryClass: "productivity-cover",
+                icon: "fas fa-home"
+            },
+            {
+                id: 8,
+                title: "Le Principe 80/20: Le secret de la productivité et du succès",
+                author: "Richard Koch",
+                rating: "★★★★★",
+                summary: "Ce livre révèle comment le Principe de Pareto, ou la règle des 80/20, peut être appliqué à presque tous les aspects de la vie pour décupler la productivité et le succès. Richard Koch démontre que 80% de nos résultats proviennent de seulement 20% de nos efforts, et inversement. En identifiant et en se concentrant sur ce '20% vital', on peut obtenir des gains massifs en efficacité, en temps et en ressources, tout en réduisant le '80% trivial' qui consomme la majeure partie de notre énergie pour peu de résultats.\n\nKoch ne se contente pas d'expliquer le principe ; il montre comment l'appliquer concrètement dans les affaires, la gestion du temps, les relations, et même la recherche du bonheur. C'est une invitation à la pensée non linéaire, à l'identification des leviers les plus puissants et à l'élimination de ce qui n'apporte pas de valeur significative. Le livre est un plaidoyer pour travailler plus intelligemment, pas plus durement, en se concentrant sur les causes qui génèrent les effets les plus importants. C'est une perspective qui change la donne pour maximiser son impact et minimiser son effort superflu.",
+                lessons: [
+                    "Identifiez le 20% des efforts, des activités ou des ressources qui génèrent 80% de vos résultats. Concentrez votre énergie sur ces facteurs clés et délaissez ou minimisez le reste.",
+                    "Appliquez le principe 80/20 à la gestion de votre temps : déterminez les 20% des tâches qui produisent 80% de votre valeur ajoutée et priorisez-les de manière agressive.",
+                    "Utilisez la règle des 80/20 pour vos relations : identifiez les 20% des relations qui vous apportent 80% de votre soutien, de votre joie et de votre croissance, et investissez davantage dans celles-ci.",
+                    "Dans les affaires, analysez quels 20% de clients, de produits ou de services génèrent 80% des revenus ou des profits. Focalisez vos stratégies de croissance sur ces éléments rentables.",
+                    "Soyez impitoyable avec l'élimination du '80% trivial'. Cela inclut les tâches peu productives, les réunions inutiles, les distractions et les habitudes qui ne contribuent pas à vos objectifs principaux.",
+                    "Révisez constamment vos hypothèses. Ce qui était votre 20% vital hier pourrait ne pas l'être demain. Une analyse régulière permet d'adapter votre concentration à l'évolution des circonstances pour une efficacité continue."
+                ],
+                professionalUse: "Incontournable pour les entrepreneurs, les managers et les consultants qui cherchent à maximiser la rentabilité et l'efficacité opérationnelle. Ce livre aide à identifier les leviers les plus puissants pour la croissance des ventes, l'optimisation des coûts, la gestion des projets et la délégation de tâches. Il encourage une pensée stratégique qui se concentre sur les actions à fort impact, plutôt que sur une approche dispersée. Pour les équipes, il peut servir de cadre pour prioriser les fonctionnalités de produit, les efforts marketing ou les objectifs de service client, garantissant que les ressources sont allouées là où elles généreront le maximum de valeur et de résultats significatifs.",
+                personalUse: "Extrêmement utile pour optimiser le temps libre, les finances personnelles et les relations. En appliquant le 80/20, vous pouvez déterminer quelles activités de loisir vous apportent le plus de bonheur, quels investissements génèrent le plus de rendement, ou quelles habitudes contribuent le plus à votre bien-être. Il aide à réduire le sentiment d'être débordé en apprenant à ignorer ce qui n'est pas essentiel, et à se concentrer sur les quelques actions clés qui mènent au plus grand épanouissement personnel. C'est un guide pour une vie plus intentionnelle et plus efficace, où vous pouvez accomplir plus avec moins d'effort, en vous concentrant sur ce qui compte vraiment pour votre bonheur et votre succès personnel.",
+                category: "Productivité",
+                categoryClass: "productivity-cover",
+                icon: "fas fa-chart-pie"
+            },
+            {
+                id: 9,
+                title: "Mangez cette grenouille !: 21 méthodes pour ne plus jamais procrastiner",
+                author: "Brian Tracy",
+                rating: "★★★★☆",
+                summary: "Brian Tracy présente une approche simple mais puissante pour vaincre la procrastination et augmenter drastiquement la productivité : 'Mangez votre grenouille !' La 'grenouille' est la tâche la plus importante, la plus difficile ou la plus désagréable que vous devez faire, et la philosophie est de la réaliser en premier le matin. Une fois que cette tâche est accomplie, le reste de votre journée est simplifié, et vous bénéficiez d'un élan de motivation. Le livre propose 21 stratégies pratiques pour identifier vos 'grenouilles', les décomposer en étapes gérables et les attaquer avec détermination.\n\nCe n'est pas seulement un livre sur la gestion du temps, mais un guide sur la discipline personnelle et la concentration. Il insiste sur l'importance de la planification, de la priorisation et de la capacité à se concentrer sur une tâche jusqu'à son achèvement. Tracy utilise un langage direct et motivant, fournissant des techniques qui peuvent être immédiatement mises en œuvre pour vaincre les habitudes de procrastination et maximiser votre efficacité, vous permettant de réaliser plus en moins de temps et de réduire le stress lié aux tâches reportées. C'est un booster de productivité pour quiconque lutte contre le report et le manque de motivation.",
+                lessons: [
+                    "Identifiez votre 'grenouille' (la tâche la plus difficile ou la plus importante) et attaquez-la en premier le matin. Faire la chose la plus difficile en premier donne un sentiment d'accomplissement et libère de l'énergie pour le reste de la journée.",
+                    "Planifiez votre journée la veille au soir. Avoir une liste claire des tâches pour le lendemain réduit la résistance au démarrage et vous permet de vous lancer directement dans les activités importantes.",
+                    "Appliquez la 'règle des trois' : identifiez les trois tâches les plus importantes que vous devez accomplir chaque jour. Concentrez-vous sur celles-ci avant toute autre chose.",
+                    "Décomposez les grandes tâches en petites étapes. Les projets intimidants deviennent plus gérables lorsqu'ils sont fractionnés, rendant chaque étape moins décourageante et plus facile à démarrer.",
+                    "Créez des blocs de temps pour le travail concentré. Éliminez les distractions et engagez-vous à travailler sans interruption sur votre 'grenouille' ou vos tâches prioritaires pendant ces périodes.",
+                    "Utilisez la procrastination positive : procrastinez sur les tâches non essentielles en vous concentrant sur les tâches à forte valeur ajoutée. Cela transforme la procrastination d'un vice en un outil de priorisation.",
+                    "Développez un sentiment d'urgence et une aversion pour le report. Cultiver l'habitude de l'action immédiate pour les tâches importantes est la clé pour devenir une personne très productive."
+                ],
+                professionalUse: "Excellent pour les professionnels confrontés à des délais serrés, à des tâches complexes et à la pression constante. Il fournit des méthodes pour améliorer la gestion du temps, la planification de projet et la capacité à se concentrer sur les priorités. Les managers peuvent l'utiliser pour aider leurs équipes à vaincre la procrastination, à améliorer la livraison des projets et à augmenter la productivité globale. C'est un guide pour une exécution plus efficace, une meilleure gestion des priorités et une réduction du stress lié aux tâches non accomplies, permettant ainsi aux professionnels de tenir leurs engagements et d'atteindre leurs objectifs de carrière plus rapidement.",
+                personalUse: "Très efficace pour les individus qui luttent avec la procrastination dans leur vie personnelle, qu'il s'agisse de projets domestiques, de paperasse administrative, d'objectifs de santé ou d'apprentissage. Il aide à développer la discipline personnelle nécessaire pour attaquer les tâches que l'on a tendance à reporter, transformant ainsi les listes de choses à faire en listes de choses faites. En appliquant ces stratégies, on peut libérer du temps pour les loisirs, réduire le stress de l'accumulation de tâches et ressentir un plus grand sentiment de contrôle et d'accomplissement au quotidien. C'est un outil simple mais puissant pour améliorer la confiance en soi et réaliser des objectifs personnels importants.",
+                category: "Productivité",
+                categoryClass: "productivity-cover",
+                icon: "fas fa-frog"
+            },
+            {
+                id: 10,
+                title: "Le club des 5h du matin",
+                author: "Robin Sharma",
+                rating: "★★★★☆",
+                summary: "Ce livre présente une routine matinale transformatrice qui promet d'optimiser la productivité, la vitalité et la sérénité. Robin Sharma, à travers une allégorie narrative, expose le concept du 'Club des 5h du matin' – l'idée que les premières heures de la journée, avant que le monde ne s'éveille, sont les plus propices à l'investissement personnel et au travail profond. Il détaille la formule du '20/20/20', consacrant les trois premières 'heures de la victoire' à l'exercice physique, la réflexion/planification, et l'apprentissage/croissance personnelle. L'auteur soutient que la maîtrise de votre matin est la clé de la maîtrise de votre vie.\n\nPlus qu'un simple guide sur le lever tôt, c'est une philosophie de vie qui encourage la discipline, la focalisation et l'excellence. Sharma insiste sur l'importance de protéger votre capital mental, physique, spirituel et émotionnel dès le début de la journée. Le livre regorge d'anecdotes inspirantes et de conseils pratiques pour surmonter la résistance au changement et faire de cette routine un pilier de votre succès personnel et professionnel. C'est un manifeste pour une vie vécue avec intention, énergie et un impact maximal, en tirant parti du pouvoir souvent inexploité des premières heures de la journée.",
+                lessons: [
+                    "Le 'Club des 5h du matin' est une méthode pour optimiser les premières heures de la journée, de 5h à 8h, en les consacrant à des activités de haute valeur ajoutée avant que les distractions ne commencent.",
+                    "La 'formule 20/20/20' pour l'heure de la victoire (5h-6h) : 20 min d'exercice intense, 20 min de réflexion/planification, et 20 min d'apprentissage/croissance. Cette combinaison maximise l'énergie, la clarté et la connaissance.",
+                    "La discipline matinale est un muscle qui se construit. Au début, il y aura de la résistance, mais la persévérance conduit à une amélioration de la volonté et de la capacité à se lever tôt et à être productif.",
+                    "Protéger votre concentration et votre énergie mentale dès le réveil en évitant les écrans, les nouvelles négatives et les e-mails pendant les premières heures. Cela préserve votre créativité et votre réactivité.",
+                    "Le 'capitalisation stack' : travailler sur vos quatre 'capitaux intérieurs' (état d'esprit, état physique, état de l'âme et état du cœur) quotidiennement. L'amélioration de l'un nourrit les autres, conduisant à une vie équilibrée et florissante.",
+                    "La maîtrise de la routine matinale crée un élan positif qui se propage à travers toute la journée, augmentant la productivité, la résilience face aux défis et le bien-être général."
+                ],
+                professionalUse: "Un atout pour les entrepreneurs, les cadres supérieurs et toute personne cherchant à optimiser sa performance et son leadership. Adopter la routine du Club des 5h du matin permet d'avoir un temps non interrompu pour la planification stratégique, la créativité et le développement personnel avant le chaos du bureau. Cela améliore la prise de décision, la gestion du stress et la capacité à diriger avec vision et énergie. Les leaders qui pratiquent cette méthode peuvent inspirer leurs équipes par leur exemple, en démontrant l'importance de l'investissement personnel pour atteindre l'excellence et maintenir une productivité élevée sur le long terme.",
+                personalUse: "Transformateur pour la vie personnelle, ce livre offre une feuille de route pour une vie plus intentionnelle et épanouissante. Il aide à libérer du temps pour les passions personnelles, l'exercice physique, la méditation, la lecture et la planification d'objectifs, qui sont souvent sacrifiés dans une journée chargée. En cultivant une routine matinale puissante, on améliore sa santé physique et mentale, sa clarté d'esprit et son sentiment de contrôle. C'est un guide pour se sentir plus énergique, plus concentré et plus aligné avec ses valeurs, menant à une vie plus équilibrée et un sentiment de réalisation personnelle accru. C'est un investissement dans votre bien-être global qui rapporte des dividendes quotidiens.",
+                category: "Productivité",
+                categoryClass: "productivity-cover",
+                icon: "fas fa-clock"
+            },
+            {
+                id: 11,
+                title: "Atomic Habits - Productivity Deep Dive",
+                author: "Jenna Smith",
+                rating: "★★★★★",
+                summary: "This deep dive into atomic habits takes the foundational principles of small, consistent improvements and explores their advanced applications in hyper-focused productivity. It goes beyond mere habit formation to delve into 'habit stacking' for complex routines, environmental design for unwavering focus, and the psychological hacks to make desired behaviors inevitable while making undesirable ones impossible. This book is for those who have grasped the basics and are ready to engineer their lives for peak performance with precision.\n\nIt features extensive case studies and practical exercises that illuminate how incremental shifts in daily routines can compound into exponential productivity gains over time. The author introduces concepts like 'friction audits' to identify and eliminate barriers to efficiency, and 'accountability partnerships' for sustained motivation. This is a masterclass in behavioral architecture, designed to turn ambition into automatic, high-output action through meticulous system building and continuous optimization.",
+                lessons: [
+                    "Master advanced habit stacking techniques to seamlessly integrate multiple small habits into a cohesive and robust daily routine, minimizing cognitive load and maximizing flow.",
+                    "Implement sophisticated environmental design principles to create workspaces and living areas that act as powerful cues for desired behaviors and strong deterrents for distractions, making productivity the default.",
+                    "Utilize 'friction audits' to systematically identify and eliminate subtle barriers that hinder productivity, from unnecessary clicks in software to minor inconveniences in physical space, streamlining workflows.",
+                    "Leverage the power of identity-based habits by consciously shaping your self-perception around your desired outcomes, fostering an internal drive that makes productive actions feel authentic and effortless.",
+                    "Develop robust accountability systems, including public commitments and reciprocal partnerships, to ensure long-term adherence to productivity goals and prevent slippage into old patterns.",
+                    "Practice the 'Deliberate Disconnection' principle: intentionally schedule periods of complete digital and social isolation to cultivate deep, uninterrupted work sessions and enhance mental clarity, guarding against constant connectivity."
+                ],
+                professionalUse: "An invaluable resource for high-performing executives, consultants, and project managers aiming to optimize their and their teams' output. It provides blueprints for designing hyper-efficient team workflows, fostering a culture of disciplined innovation, and implementing robust habit-forming strategies within organizational structures. Professionals can apply these advanced techniques to streamline complex projects, enhance decision-making under pressure, and build systems that ensure consistent, high-quality deliverables. It's particularly useful for leaders looking to embed continuous improvement and self-mastery principles into their corporate culture, leading to significant competitive advantages and sustained growth.",
+                personalUse: "Revolutionizes personal productivity for individuals committed to achieving ambitious personal goals, whether in fitness, learning, creative pursuits, or financial independence. It offers granular strategies to overcome chronic procrastination, build unbreakable routines for personal growth, and curate a lifestyle that inherently supports high performance and well-being. This book empowers you to design your personal environment and schedule to make your aspirations inevitable, reducing willpower fatigue and transforming difficult tasks into enjoyable processes. It's the ultimate guide for anyone ready to meticulously engineer their personal habits for extraordinary long-term results and an unparalleled sense of accomplishment.",
+                category: "Productivité",
+                categoryClass: "productivity-cover",
+                icon: "fas fa-cog"
+            },
+            {
+                id: 12,
+                title: "The One Thing: The Surprisingly Simple Truth Behind Extraordinary Results",
+                author: "Gary Keller & Jay Papasan",
+                rating: "★★★★★",
+                summary: "This book challenges the myth of multitasking and emphasizes the power of focusing on 'The ONE Thing' – the single most important activity that, by doing it, will make everything else easier or unnecessary. Gary Keller and Jay Papasan provide a framework for achieving extraordinary results by narrowing your focus to what matters most, rather than trying to do too many things at once. They argue that success is built sequentially, one thing at a time, and that clarity on your 'ONE Thing' creates a domino effect that leads to significant breakthroughs.\n\nIt delves into the common traps of productivity, such as saying 'yes' to too many things, the fear of missing out, and the belief that all tasks are equally important. The authors offer practical advice on how to ask the 'Focusing Question' to identify your ONE Thing in different areas of your life (professional, personal, spiritual, physical) and then structure your time and energy around it. This is a compelling argument for disciplined focus and a powerful antidote to overwhelm, designed to help you achieve more by doing less, but doing what truly counts with intense dedication.",
+                lessons: [
+                    "The core principle is to find your 'ONE Thing' – that single most important activity that, if done, makes everything else easier or unnecessary. Focus all your energy on this one task.",
+                    "Multitasking is a myth and a productivity killer. True productivity comes from sequential focus, giving your full attention to one high-leverage task at a time.",
+                    "Use the 'Focusing Question': 'What's the ONE Thing I can do such that by doing it everything else will be easier or unnecessary?' Apply this question to your big picture, medium-term goals, and daily tasks.",
+                    "Block out time for your 'ONE Thing' and protect it fiercely from distractions and interruptions. Treat this time as a non-negotiable appointment with yourself.",
+                    "Say 'no' more often to everything that isn't your ONE Thing. This requires courage and clarity, but it's essential for protecting your focus and preventing overwhelm.",
+                    "Success is built sequentially. Master one thing, then the next. Don't try to tackle everything at once, as this dilutes your efforts and leads to mediocre results across the board."
+                ],
+                professionalUse: "Crucial for business leaders, entrepreneurs, and sales professionals who need to identify key priorities for growth and innovation. It helps in streamlining strategic planning, focusing sales efforts on the most profitable leads, and prioritizing product development that delivers the greatest impact. For teams, it fosters a culture of clear prioritization, ensuring everyone is aligned on the most critical objectives and avoiding wasted effort on less important tasks. It's particularly effective for improving project completion rates and achieving breakthrough results by concentrating resources on the vital few rather than the trivial many, leading to a more impactful and less stressful work environment.",
+                personalUse: "Highly beneficial for individuals aiming to achieve significant personal goals, from health transformations to financial freedom or mastering a new skill. It encourages a disciplined approach to personal development by identifying the one habit or action that will have the biggest ripple effect. It helps reduce feelings of overwhelm by simplifying choices and providing clarity on where to direct personal energy. This book empowers you to make intentional choices about your time, relationships, and self-care, ensuring that your most valuable resources are allocated to what truly matters for your happiness and long-term fulfillment, enabling you to live a life of purpose and profound accomplishment.",
+                category: "Productivité",
+                categoryClass: "productivity-cover",
+                icon: "fas fa-bullseye"
+            },
+            {
+                id: 13,
+                title: "The Effective Executive",
+                author: "Peter F. Drucker",
+                rating: "★★★★★",
+                summary: "Peter F. Drucker's seminal work on management and effectiveness argues that effectiveness can be learned and mastered, regardless of one's position in an organization. He defines an 'effective executive' not by their knowledge or intelligence, but by their ability to get the right things done. Drucker introduces five essential practices for effectiveness: time management, focusing on contribution, making strength productive, prioritizing, and making effective decisions. This book is a timeless classic that transcends fleeting management fads, offering principles that remain relevant for any professional aiming to optimize their impact.\n\nIt challenges the conventional wisdom that productivity is about working harder or longer. Instead, Drucker posits that it's about systematically thinking about what truly matters and then applying disciplined action to those areas. He emphasizes managing one's own time, contributing to the organization's goals, leveraging the strengths of oneself and others, concentrating efforts, and making sound decisions. This work is a foundational text for anyone in a leadership or managerial role, providing deep insights into how to consistently deliver results and make a significant difference in any organization.",
+                lessons: [
+                    "Effective executives manage their time rigorously by recording, analyzing, and then consolidating it to focus on high-impact activities and minimize wasteful distractions.",
+                    "Focus on contribution: Instead of asking 'What do I want to get out of this?', ask 'What can I contribute that will make a difference?' This shifts focus from effort to results.",
+                    "Make strength productive: Leverage your own strengths and those of your team members. Don't focus excessively on weaknesses; instead, build on what people do well to achieve superior performance.",
+                    "Concentrate on a few major areas where superior performance will produce outstanding results. Effective executives avoid scattering their efforts over many minor tasks.",
+                    "Make effective decisions: Understand that decision-making is a systematic process, not just an intuitive leap. This involves clearly defining the problem, gathering facts, considering alternatives, and making a commitment to action.",
+                    "Systematic abandonment: Regularly review and eliminate old activities, products, or services that no longer contribute value, freeing up resources for new, more productive initiatives."
+                ],
+                professionalUse: "A must-read for current and aspiring leaders, managers, and high-level individual contributors. Drucker's principles provide a robust framework for improving personal and organizational effectiveness, making better strategic decisions, and optimizing resource allocation. It helps in identifying what genuinely drives results in a complex environment, fostering a culture of accountability and clear objectives. For managers, it offers a guide to leading teams more effectively by focusing on their strengths, delegating wisely, and ensuring that all efforts are aligned with the overall mission, leading to significantly improved organizational performance and innovation.",
+                personalUse: "While business-focused, the lessons on time management, contribution, and decision-making are profoundly applicable to personal life. It helps individuals prioritize personal goals, manage their daily schedules more effectively, and make better choices about how they invest their time and energy. It encourages a results-oriented mindset in personal projects, relationships, and self-development. By applying Drucker's principles, one can reduce personal overwhelm, achieve significant personal milestones, and cultivate a life of greater purpose and impact, ensuring that personal efforts are directed towards meaningful outcomes rather than wasted on trivialities.",
+                category: "Productivité",
+                categoryClass: "productivity-cover",
+                icon: "fas fa-user-tie"
+            },
+            {
+                id: 14,
+                title: "The Productivity Project",
+                author: "Chris Bailey",
+                rating: "★★★★☆",
+                summary: "After a year-long experiment in which he conducted a series of radical productivity experiments (e.g., living in isolation, meditating for hours daily, using a smartphone for only an hour a day), Chris Bailey shares his findings on what truly drives productivity. This book is a distillation of the most effective strategies for managing time, attention, and energy. Bailey provides practical, evidence-based tactics for working smarter, not just harder, and for cultivating a more mindful approach to daily tasks. He emphasizes understanding your own productivity 'sweet spot' and tailoring strategies to fit your unique work style.\n\n'The Productivity Project' is a refreshing departure from one-size-fits-all advice, offering a comprehensive toolkit for anyone looking to boost their output and reduce stress. It covers topics from creating daily rituals and managing email more effectively to reducing distractions and making strategic use of technology. Bailey's approachable style and real-world experimentation make this a highly relatable and actionable guide for optimizing personal productivity and achieving more meaningful work, by focusing on quality of effort rather than just quantity.",
+                lessons: [
+                    "Identify and manage your three main levers of productivity: Time, Attention, and Energy. Optimizing all three simultaneously leads to the greatest output.",
+                    "Conduct personal experiments to discover what productivity strategies work best for you. There's no single perfect method; personalization is key to sustained effectiveness.",
+                    "Implement a daily 'biological prime time' to tackle your most important work during your peak hours of energy and focus, ensuring your most demanding tasks get your best attention.",
+                    "Develop strategic breaks and recharge rituals to prevent burnout and maintain sustained high performance throughout the day. Rest is not idleness; it's an investment in future productivity.",
+                    "Master the art of single-tasking. Focus exclusively on one task at a time to improve concentration, reduce errors, and complete work more efficiently than through multitasking.",
+                    "Proactively manage external and internal distractions. This includes techniques for handling emails, social media, and intrusive thoughts to create a clearer path for deep work."
+                ],
+                professionalUse: "Highly practical for professionals seeking to enhance their daily efficiency, manage workloads more effectively, and reduce professional overwhelm. It offers actionable strategies for improving focus in open-plan offices, handling a high volume of emails, and planning projects more strategically. For teams, it can inspire discussions around collaborative productivity, helping members identify and share their best practices for managing their individual workflows. It's an excellent resource for anyone looking to refine their work habits, lead more productive meetings, and ensure that their professional efforts are consistently aligned with generating tangible, high-value outcomes for their organization.",
+                personalUse: "An invaluable guide for individuals looking to get more out of their personal time, whether for hobbies, family, or personal projects. It provides techniques for better managing personal finances, streamlining household chores, and dedicating focused time to self-improvement goals. By understanding and optimizing their personal time, attention, and energy, readers can reduce stress, enhance their well-being, and feel more in control of their lives. This book is ideal for those who want to create more meaningful free time, pursue long-held passions, and live a more intentional and fulfilling life by making conscious choices about where their most valuable resources are invested.",
+                category: "Productivité",
+                categoryClass: "productivity-cover",
+                icon: "fas fa-chart-line"
+            },
+            // --- MINDSET (9 Livres - Placeholder) ---
+            {
+                id: 15,
+                title: "Le pouvoir de l'habitude",
+                author: "Charles Duhigg",
+                rating: "★★★★★",
+                summary: "Ce livre explore en profondeur la science derrière la formation des habitudes, des comportements individuels aux routines organisationnelles et sociales. Charles Duhigg révèle comment les habitudes fonctionnent via une boucle neurologique de 'signal, routine, récompense' et comment, en comprenant cette boucle, nous pouvons non seulement changer nos propres vies, mais aussi influencer des groupes entiers et des marchés. Il présente des études de cas fascinantes, allant de la réussite d'individus à la transformation de grandes entreprises comme Starbucks, montrant l'impact colossal que les habitudes peuvent avoir sur notre quotidien.\n\nCe n'est pas un simple recueil d'astuces, mais une exploration scientifique et narrative des mécanismes qui sous-tendent nos comportements automatiques. Duhigg démontre que les habitudes ne sont pas une fatalité, mais qu'elles peuvent être comprises, déconstruites et reconstruites consciemment. En s'appuyant sur des découvertes en neurologie, psychologie et sociologie, il offre un regard perspicace sur la façon dont nous pouvons maîtriser nos habitudes pour façonner un destin plus aligné avec nos aspirations, que ce soit pour des objectifs personnels ou collectifs, en identifiant les 'habitudes maîtresses' qui déclenchent des changements en cascade.",
+                lessons: [
+                    "La boucle de l'habitude (signal, routine, récompense) est le mécanisme fondamental derrière tous les comportements habituels. Identifier chaque composant est la première étape pour remodeler une habitude, car cela permet d'intervenir à des points précis.",
+                    "Les 'habitudes maîtresses' sont des habitudes qui, une fois changées, entraînent d'autres changements positifs en cascade dans d'autres domaines de la vie. Elles sont la clé pour des transformations profondes et durables, agissant comme des leviers puissants.",
+                    "Les organisations peuvent exploiter la science des habitudes pour améliorer la productivité et la sécurité. En créant des routines positives et en récompensant les bons comportements, on peut changer la culture d'entreprise de manière organique et efficace.",
+                    "Le changement d'habitude est difficile mais possible si l'on comprend les mécanismes sous-jacents et si l'on anticipe les défis. Il faut souvent substituer une nouvelle routine à l'ancienne tout en conservant le même signal et la même récompense, pour minimiser la friction.",
+                    "La croyance et la conviction sont des catalyseurs puissants dans le processus de changement d'habitude, surtout en période de stress ou de doute. Croire en la possibilité de changer et en sa propre capacité renforce la persévérance et la résilience.",
+                    "La substitution des routines : Pour briser une mauvaise habitude, il est plus efficace de remplacer la routine indésirable par une nouvelle routine qui offre la même récompense, plutôt que de tenter de l'éliminer purement et simplement sans alternative."
+                ],
+                professionalUse: "Indispensable pour les leaders, les responsables RH et les consultants qui souhaitent comprendre et modifier les comportements au sein des organisations. Il fournit un cadre pour identifier les habitudes d'entreprise, les transformer pour améliorer l'efficacité, la sécurité et la culture, et même créer de nouvelles habitudes de consommation chez les clients. Il est particulièrement utile pour les projets de gestion du changement, l'intégration de nouvelles technologies ou processus, et l'amélioration des performances d'équipe en s'attaquant à la racine des comportements. Il aide à diagnostiquer pourquoi certaines pratiques persistent et comment les modifier pour un impact positif et durable.",
+                personalUse: "Excellent pour comprendre pourquoi nous faisons ce que nous faisons et comment reprendre le contrôle de nos vies. Que ce soit pour arrêter de fumer, commencer à faire de l'exercice, gérer son temps plus efficacement, ou réduire le stress lié à des routines improductives, ce livre offre des insights profonds sur la manière de déconstruire et de reconstruire les habitudes personnelles. Il aide à devenir plus conscient de ses propres signaux et récompenses, permettant ainsi de mieux se fixer des objectifs et de les atteindre en transformant les routines quotidiennes en leviers de succès. C'est une feuille de route pour une auto-amélioration consciente et durable.",
+                category: "Mindset",
+                categoryClass: "mindset-cover",
+                icon: "fas fa-brain"
+            },
+            { id: 16, title: "L'Alchimiste", author: "Paulo Coelho", rating: "★★★★★", summary: "Ce roman allégorique suit le parcours initiatique de Santiago, un jeune berger andalou qui abandonne sa vie confortable pour suivre son rêve de trouver un trésor caché près des Pyramides d'Égypte. Son voyage épique à travers le désert est une métaphore profonde de la découverte de soi, de la poursuite des rêves et de l'écoute de son cœur. À travers des rencontres mystiques et des défis inattendus, Santiago apprend les leçons de l'univers, la 'Légende Personnelle' et le langage universel. Le livre est une méditation sur le destin, le libre arbitre, et la capacité de chaque individu à réaliser ses aspirations les plus profondes en se connectant à la sagesse de l'univers. C'est un hymne à la persévérance et à la foi en son propre chemin.\n\nAu-delà de l'aventure, L'Alchimiste est une puissante parabole sur la spiritualité, l'écoute intérieure et la connexion avec le 'langage du monde'. Chaque obstacle et chaque rencontre sont des occasions d'apprendre des leçons universelles sur la persévérance, la peur de l'échec et la recherche de son propre chemin. Il encourage à se fier à son intuition et à comprendre que la plus grande richesse n'est pas toujours matérielle, mais réside dans le voyage et la transformation intérieure. C'est un livre qui inspire à poursuivre ses aspirations les plus profondes avec courage et à croire en la bienveillance de l'univers.",
+                lessons: [
+                    "Chacun a une 'Légende Personnelle', un destin unique à accomplir. La clé est d'écouter son cœur et de suivre les signes que l'univers nous envoie pour la réaliser, même si le chemin semble incertain et les obstacles nombreux.",
+                    "La peur de l'échec est souvent un obstacle plus grand que l'échec lui-même. Oser poursuivre ses rêves malgré les doutes, les critiques et les revers est essentiel pour la croissance et l'accomplissement personnel, car l'échec est une leçon.",
+                    "L'univers conspire toujours en faveur de ceux qui ont un désir ardent et qui s'engagent pleinement à poursuivre leur Légende Personnelle. Les opportunités et les ressources apparaissent lorsque l'on est aligné avec son but et que l'on persévère.",
+                    "Le véritable trésor n'est pas toujours matériel, mais souvent la sagesse et l'expérience acquises durant le voyage. La transformation intérieure, la compréhension de soi et du monde, est la plus grande récompense de la quête.",
+                    "Il est important d'être présent et conscient des 'signes' et des opportunités qui se présentent. L'univers communique constamment par des coïncidences et des rencontres, et c'est à nous d'apprendre à décoder ses messages pour nous guider.",
+                    "L'amour est la force la plus puissante, capable de transformer et de donner un sens profond à toute quête. Les relations authentiques enrichissent le voyage, renforcent la détermination et donnent une raison de persévérer."
+                ],
+                professionalUse: "Inspire la vision stratégique et la persévérance chez les entrepreneurs, les créatifs et les innovateurs. Il encourage à suivre son intuition dans les décisions d'affaires, à surmonter les obstacles avec foi et à ne pas abandonner ses projets, même face à l'adversité et aux doutes. Il aide à cultiver un état d'esprit résilient et à reconnaître les opportunités cachées là où d'autres ne voient que des problèmes, transformant les défis en catalyseurs de croissance. Pour les professionnels, il s'agit de trouver un sens plus profond à leur travail et de le lier à leur 'Légende Personnelle' au sein de leur carrière, ce qui conduit à une plus grande satisfaction, à des réalisations innovantes et à une capacité à inspirer les autres.",
+                personalUse: "Un puissant rappel de l'importance de suivre ses rêves et d'écouter son intuition dans la vie de tous les jours. Ce livre encourage à prendre des risques calculés, à sortir de sa zone de confort et à faire confiance au processus de la vie, même lorsque les choses ne se passent pas comme prévu. Il offre une perspective spirituelle sur les défis personnels, aidant à voir les revers non pas comme des échecs, mais comme des leçons nécessaires sur le chemin de la réalisation de soi. Il est parfait pour ceux qui cherchent un sens plus profond à leur existence, qui ont besoin d'encouragement pour entreprendre un voyage de transformation personnelle, et qui souhaitent se sentir plus connectés à leur but et à l'univers environnant, trouvant la force et le sens dans chaque étape de leur parcours.",
+                category: "Mindset",
+                categoryClass: "mindset-cover",
+                icon: "fas fa-brain"
+            },
+            { id: 17, title: "D'un coup d'œil", author: "Malcolm Gladwell", rating: "★★★★★", summary: "Ce livre explore le concept du 'mince tranchage' (thin-slicing) – la capacité de l'esprit humain à prendre des décisions rapides et précises basées sur des informations limitées. Malcolm Gladwell nous emmène dans un voyage fascinant à travers des exemples allant de l'expertise des restaurateurs à l'intuition des militaires en passant par les jugements instantanés des psychologues matrimoniaux. Il soutient que nos jugements les plus spontanés et nos premières impressions sont souvent plus fiables qu'une analyse prolongée et délibérée. Le livre nous invite à faire confiance à notre intuition et à comprendre les mécanismes subconscients qui façonnent nos perceptions et nos décisions, démontrant comment la rapidité de la pensée peut être une forme de sagesse puissante.\n\nGladwell remet en question l'idée que les meilleures décisions sont toujours le fruit d'une analyse exhaustive et rationnelle. Il met en lumière le pouvoir de notre subconscient et de notre 'ordinateur adaptatif' interne, capable de traiter d'énormes quantités d'informations non verbales en un clin d'œil pour produire des jugements étonnamment précis. C'est une exploration captivante de la nature de l'expertise et de l'intuition, qui nous pousse à reconsidérer la façon dont nous prenons des décisions et à valoriser la rapidité de la pensée lorsque les enjeux sont élevés ou que le temps est limité. Il s'agit de reconnaître quand notre intuition est une alliée fiable et quand elle peut nous induire en erreur.",
+                lessons: [
+                    "Les jugements rapides et les premières impressions, souvent sous-estimés, peuvent être étonnamment précis. Notre cerveau est capable de déduire des informations complexes à partir de données minimales, grâce à un processus appelé 'mince tranchage' ou 'évaluation rapide'.",
+                    "L'intuition n'est pas de la magie, mais le résultat d'une expérience et d'une expertise accumulées qui permettent au subconscient de reconnaître des motifs et de prendre des décisions éclairées sans analyse consciente détaillée et prolongée.",
+                    "Trop d'informations ou une analyse excessive peuvent parfois entraver la prise de décision efficace, menant à la 'paralysie par l'analyse'. Parfois, moins c'est plus, surtout quand l'intuition est bien entraînée et que la situation l'exige.",
+                    "Les environnements et les signaux subtils jouent un rôle crucial dans nos perceptions et nos jugements inconscients. Comprendre ces influences cachées permet de mieux évaluer les situations et les personnes, et de se protéger contre les biais.",
+                    "L'entraînement et l'expérience sont essentiels pour affiner l'intuition et la rendre plus fiable. Les experts sont capables de 'trancher finement' car ils ont emmagasiné une vaste base de données d'expériences pertinentes et de schémas reconnus.",
+                    "Il est important de trouver un équilibre entre la pensée rapide et la pensée lente, selon le contexte. Pour les situations complexes avec des enjeux élevés, une analyse délibérée est nécessaire, mais pour d'autres, l'intuition peut être supérieure et plus rapide."
+                ],
+                professionalUse: "Pertinent pour les leaders, les professionnels de la vente, les créatifs, les recruteurs et quiconque doit prendre des décisions rapides sous pression ou évaluer rapidement des situations complexes. Il encourage à faire confiance à son expertise et à son instinct, tout en reconnaissant les limites de cette approche et quand une analyse plus approfondie est nécessaire. Il est utile pour l'évaluation rapide de situations d'urgence, la gestion de crise, la négociation rapide et l'amélioration de l'intuition managériale. Pour les entrepreneurs, cela peut signifier la capacité à évaluer rapidement les opportunités de marché, la viabilité d'un partenariat ou la réactivité d'un produit. Pour les managers, il aide à lire les dynamiques d'équipe, à prendre des décisions d'embauche plus éclairées et à anticiper les comportements clients.",
+                personalUse: "Ce livre aide à comprendre et à faire confiance à ses propres intuitions dans la vie quotidienne, rendant les décisions plus fluides et moins stressantes. Il peut améliorer la prise de décision rapide dans des situations sociales, des choix personnels, des évaluations de personnes ou des situations d'achat. Il encourage à cultiver l'expérience dans des domaines clés pour affiner son 'tranchage mince' personnel et à reconnaître les moments où notre instinct est le plus fiable. C'est une lecture qui modifie la façon dont vous percevez votre propre capacité à juger et à réagir, vous rendant plus confiant dans vos décisions rapides et vos premières impressions, et vous aidant à naviguer plus efficacement dans des situations ambiguës ou sous pression, en utilisant la sagesse de votre subconscient.",
+                category: "Mindset",
+                categoryClass: "mindset-cover",
+                icon: "fas fa-brain"
+            },
+            { id: 18, title: "Le manuel du guerrier pacifique", author: "Dan Millman", rating: "★★★★★", summary: "Ce récit autobiographique et spirituel suit Dan, un jeune gymnaste talentueux mais tourmenté, dont la vie bascule après sa rencontre avec un mystérieux vieil homme nommé Socrate, un guide spirituel énigmatique. Socrate enseigne à Dan une nouvelle philosophie de vie, axée sur la conscience de l'instant présent, la discipline intérieure et la recherche de la sagesse au-delà des apparences. Le livre explore les thèmes de la mort, de l'amour, de la peur, et du sens de la vie, en défiant les conventions de la pensée matérialiste. C'est un voyage initiatique qui transforme la vision du monde de Dan, lui apprenant à trouver la paix et la force en lui-même, même au milieu de l'adversité. C'est un conte profondément inspirant sur la transcendance et la découverte de son vrai potentiel, et un rappel que la vraie sagesse est souvent trouvée dans les expériences ordinaires de la vie.\n\nCe n'est pas seulement l'histoire d'une transformation personnelle, mais aussi une exploration des grandes questions existentielles. Millman, à travers le personnage de Socrate, nous pousse à remettre en question nos illusions, nos peurs et nos attachements. Il nous invite à vivre pleinement chaque instant, à embrasser les défis comme des opportunités d'apprentissage, et à reconnaître que le bonheur et la paix ne dépendent pas des circonstances extérieures, mais de notre état d'esprit intérieur. Le livre est un appel à l'éveil, à vivre avec intention et à trouver la joie dans le présent, quelle que soit la turbulence environnante. C'est une œuvre qui change la perspective sur la vie et le sens de l'existence.",
+                lessons: [
+                    "Le moment présent est tout ce qui existe. Libérez-vous des regrets du passé et des anxiétés concernant l'avenir pour vivre pleinement et consciemment chaque instant, car c'est là que réside le véritable pouvoir et la paix intérieure.",
+                    "La véritable force ne vient pas de la puissance physique ou de la possession matérielle, mais de la paix intérieure et de la maîtrise de soi. Un 'guerrier pacifique' affronte la vie avec calme, courage et clarté d'esprit, quelles que soient les circonstances extérieures.",
+                    "La vie est une série d'expériences et de leçons, et non une destination. Chaque défi, chaque joie et chaque déception sont des opportunités de croissance et de compréhension plus profonde de soi et du monde, si l'on choisit de les aborder avec curiosité et ouverture.",
+                    "Les peurs et les doutes sont des illusions créées par l'esprit. En les confrontant et en reconnaissant leur nature éphémère, on peut les dépasser et révéler sa force intérieure inébranlable et sa résilience naturelle.",
+                    "L'ego et l'attachement aux résultats et aux possessions sont des sources de souffrance. Apprenez à lâcher prise sur le besoin de contrôler et à accepter ce qui est, trouvant ainsi la liberté, la sérénité et un bonheur non conditionné.",
+                    "La sagesse se trouve souvent dans les choses simples et les expériences quotidiennes. Il n'est pas nécessaire de chercher des réponses complexes ou mystiques; l'illumination est accessible en observant attentivement la vie ordinaire avec un esprit ouvert et une conscience aigüe."
+                ],
+                professionalUse: "Utile pour les professionnels cherchant à gérer le stress, à améliorer leur concentration et à maintenir une perspective équilibrée face aux défis du travail et aux pressions des délais. Il encourage la pleine conscience dans les tâches quotidiennes, ce qui peut mener à une meilleure performance, à une prise de décision plus calme et à une réduction de l'épuisement professionnel. Il offre une approche philosophique pour aborder les projets, les conflits et la pression des résultats, permettant de rester calme et centré même dans des environnements très exigeants. Pour les leaders, il peut inspirer une culture de la résilience, de la sagesse et de la sérénité au sein de leur équipe, favorisant un bien-être collectif et une productivité durable.",
+                personalUse: "Profondément transformateur pour la croissance personnelle et spirituelle. Il offre des outils pour gérer l'anxiété, développer la pleine conscience et trouver un sens plus profond à la vie au-delà des objectifs matériels. Il aide à surmonter les peurs existentielles, à vivre dans le présent et à cultiver la paix intérieure même face à l'incertitude. C'est un livre qui peut radicalement changer votre perception de vous-même et du monde, vous aidant à trouver la joie dans les petites choses et à affronter les grandes questions de l'existence avec courage, acceptation et sérénité. Idéal pour ceux qui cherchent une voie spirituelle pragmatique et un guide pour une vie plus authentique et épanouie.",
+                category: "Mindset",
+                categoryClass: "mindset-cover",
+                icon: "fas fa-brain"
+            },
+            { id: 19, title: "L'intelligence émotionnelle", author: "Daniel Goleman", rating: "★★★★★", summary: "Ce livre révolutionnaire de Daniel Goleman a popularisé le concept de l'intelligence émotionnelle (IE) et a démontré son importance cruciale pour le succès personnel et professionnel. Goleman soutient que la capacité à comprendre et gérer ses propres émotions, ainsi qu'à percevoir et influencer celles des autres, est souvent plus déterminante que le quotient intellectuel (QI) traditionnel. Il explore les cinq composantes clés de l'IE : la conscience de soi, la maîtrise de soi, la motivation, l'empathie et les compétences sociales.\n\nÀ travers de nombreuses études de cas et recherches en neurosciences, Goleman montre comment l'intelligence émotionnelle impacte la performance au travail, les relations interpersonnelles, le bien-être et même la santé physique. Le livre est un appel à cultiver ces compétences non-cognitives, souvent négligées par les systèmes éducatifs et les entreprises. Il offre des stratégies pour développer son IE, permettant ainsi de mieux gérer le stress, de résoudre les conflits plus efficacement, de communiquer avec plus d'impact et de bâtir des relations plus solides et plus satisfaisantes. C'est une œuvre fondamentale pour quiconque souhaite améliorer son potentiel humain et sa capacité à naviguer dans le monde complexe des émotions.",
+                lessons: [
+                    "La conscience de soi est la pierre angulaire de l'intelligence émotionnelle. Comprendre ses propres émotions, forces, faiblesses, valeurs et objectifs permet de mieux diriger ses actions et ses réactions.",
+                    "La maîtrise de soi consiste à gérer ses impulsions et ses émotions, à rester calme sous la pression, à être adaptable et à maintenir une attitude positive même face à l'adversité. Cela inclut la capacité à différer la gratification.",
+                    "La motivation intrinsèque est essentielle. Définissez des objectifs significatifs et travaillez avec persévérance pour les atteindre, en trouvant la joie et l'énergie dans le processus lui-même, plutôt que de dépendre de récompenses externes.",
+                    "L'empathie est la capacité à comprendre et à partager les sentiments des autres. Elle permet de mieux se connecter, de construire des relations solides et de répondre de manière appropriée aux besoins émotionnels d'autrui.",
+                    "Les compétences sociales sont la capacité à gérer les relations, à influencer, à collaborer et à résoudre les conflits. Elles sont cruciales pour le travail d'équipe et le leadership efficace, et pour naviguer dans les dynamiques de groupe.",
+                    "L'intelligence émotionnelle peut être développée et améliorée à tout âge par la pratique et la conscience de soi. C'est une compétence qui se cultive activement par l'auto-observation et l'interaction sociale intentionnelle."
+                ],
+                professionalUse: "Absolument vital pour les managers, les leaders, les professionnels des RH, les formateurs et toute personne évoluant dans des rôles interpersonnels. Il fournit un cadre pour comprendre la dynamique des équipes, gérer les conflits, motiver les employés et construire une culture d'entreprise positive. Il aide à améliorer la communication, la négociation et la capacité à inspirer confiance. Les principes de l'intelligence émotionnelle sont appliqués pour le développement du leadership, la gestion du changement, la sélection et le développement des talents, ainsi que pour créer des environnements de travail où les employés se sentent compris, valorisés et engagés, menant à une productivité accrue et à une meilleure rétention des talents.",
+                personalUse: "Un guide inestimable pour améliorer toutes les relations personnelles, des amitiés aux liens familiaux et amoureux. Il aide à mieux se comprendre soi-même, à gérer ses réactions émotionnelles face aux défis de la vie, et à communiquer avec plus d'authenticité et d'empathie avec les autres. Le livre offre des outils pour gérer le stress, l'anxiété et la colère de manière constructive, et pour développer une plus grande résilience face aux revers. Il permet de construire des relations plus profondes et plus significatives, de résoudre les désaccords avec plus de diplomatie et de vivre une vie personnelle plus équilibrée, sereine et épanouissante, en cultivant une intelligence émotionnelle qui enrichit chaque interaction.",
+                category: "Mindset",
+                categoryClass: "mindset-cover",
+                icon: "fas fa-heart"
+            },
+            { id: 20, title: "Man's Search for Meaning", author: "Viktor Frankl", rating: "★★★★★", summary: "Ce livre est un témoignage poignant et une exploration profonde de la quête de sens de l'existence humaine. Viktor Frankl, psychiatre et survivant de l'Holocauste, partage son expérience dans les camps de concentration et en tire une conclusion fondamentale : même dans les conditions les plus extrêmes de souffrance, l'homme peut trouver un sens à sa vie. Il développe la logothérapie, une forme de psychothérapie axée sur la recherche de sens, et soutient que la principale force motrice de l'être humain n'est pas la recherche du plaisir ou du pouvoir, mais la volonté de trouver un sens à son existence.\n\nFrankl démontre que la capacité à choisir son attitude face à une situation donnée, à trouver un but même dans la douleur, est la dernière des libertés humaines. Ce livre est une source d'inspiration pour quiconque traverse des épreuves, cherchant à comprendre le but de la souffrance ou simplement à trouver plus de sens dans sa vie quotidienne. C'est une œuvre qui transcende les circonstances personnelles pour offrir une perspective universelle sur la résilience de l'esprit humain, la capacité à trouver la lumière même dans l'obscurité la plus profonde, et l'importance cruciale d'avoir un 'pourquoi' pour supporter n'importe quel 'comment'.",
+                lessons: [
+                    "Le sens de la vie peut être trouvé même dans les circonstances les plus terribles et douloureuses. La souffrance est inévitable, mais la manière dont nous y répondons et le sens que nous lui donnons sont notre choix ultime.",
+                    "La principale force motrice de l'être humain est la volonté de trouver un sens à son existence ('Wille zum Sinn'). C'est ce qui nous permet de persévérer et de transcender l'adversité.",
+                    "Trois voies principales mènent à la découverte du sens : en créant une œuvre ou en accomplissant une tâche; en vivant une expérience ou en rencontrant quelqu'un (amour); et en trouvant un sens dans la souffrance inévitable.",
+                    "La liberté de choisir son attitude : La dernière des libertés humaines est de choisir sa propre attitude dans n'importe quel ensemble de circonstances, de choisir sa propre voie, et de trouver un sens même quand tout semble perdu.",
+                    "L'humour et le détachement peuvent être des outils puissants pour survivre à des situations extrêmes et maintenir son intégrité mentale, en offrant une distance par rapport à la souffrance immédiate.",
+                    "La responsabilité personnelle est primordiale. Nous sommes responsables de trouver et d'actualiser le sens de notre propre vie, et de répondre aux questions que la vie nous pose à travers nos actions et nos choix."
+                ],
+                professionalUse: "Essentiel pour les leaders et les managers qui cherchent à créer un environnement de travail où les employés trouvent un sens à leur contribution. Il aide à comprendre la motivation intrinsèque et la résilience face à des défis professionnels importants. Pour les professionnels du secteur de la santé, les thérapeutes et les conseillers, c'est un texte fondamental sur la logothérapie et la capacité humaine à trouver la signification même dans la maladie ou le deuil. Il encourage à aborder les défis de carrière avec un sens profond du but, à gérer le stress avec une perspective plus large et à trouver une vocation dans son travail, améliorant ainsi la satisfaction professionnelle et la résilience face aux revers.",
+                personalUse: "Un livre profondément émouvant et inspirant pour quiconque traverse des épreuves, cherche un sens à sa vie ou simplement à approfondir sa compréhension de la condition humaine. Il offre une perspective puissante sur la résilience, la capacité à transcender la souffrance et à trouver de la lumière même dans les moments les plus sombres. Il encourage à la réflexion sur ses propres valeurs, son but et sa contribution au monde. Lire ce livre peut aider à surmonter la dépression, l'anxiété et le désespoir en fournissant un cadre pour trouver la signification dans toutes les expériences, et en cultivant une perspective qui renforce la force intérieure et la capacité à choisir la dignité et l'espoir, même face à l'adversité la plus brutale.",
+                category: "Mindset",
+                categoryClass: "mindset-cover",
+                icon: "fas fa-compass"
+            },
+            { id: 21, title: "Mindset: Changer votre façon de penser pour réussir", author: "Carol S. Dweck", rating: "★★★★★", summary: "Carol S. Dweck, psychologue de renommée mondiale, révèle dans ce livre révolutionnaire l'impact profond de nos 'mindsets' (états d'esprit) sur nos réussites. Elle distingue deux types de mindsets : le 'mindset fixe' (fixed mindset), qui croit que les capacités sont innées et immuables, et le 'mindset de croissance' (growth mindset), qui voit les capacités comme pouvant être développées par l'effort et l'apprentissage. Dweck démontre que notre mindset influence non seulement nos performances scolaires ou professionnelles, mais aussi nos relations, notre résilience face à l'échec et notre potentiel de bonheur.\n\nÀ travers des études de cas fascinantes, allant du sport à l'éducation en passant par le monde des affaires, elle montre comment le mindset de croissance est le moteur de l'accomplissement et de la résilience. Le livre ne se contente pas de décrire ces deux mindsets, il offre également des stratégies concrètes pour cultiver un mindset de croissance en soi et chez les autres, en particulier chez les enfants. C'est une lecture essentielle pour les parents, les éducateurs, les managers et toute personne cherchant à libérer son plein potentiel et à développer une attitude plus positive et proactive face aux défis de la vie.",
+                lessons: [
+                    "Comprenez la différence fondamentale entre un mindset fixe (croyance que les qualités sont statiques) et un mindset de croissance (croyance que les qualités peuvent être développées par l'effort). Votre mindset façonne vos réactions et vos résultats.",
+                    "L'échec n'est pas une preuve d'incapacité, mais une opportunité d'apprentissage et de croissance. Adoptez une perspective où les défis et les erreurs sont des catalyseurs pour l'amélioration, non des verdicts sur votre valeur.",
+                    "Félicitez l'effort et le processus plutôt que le talent inné ou le résultat final. Cela encourage la persévérance et la recherche de l'amélioration continue, renforçant le mindset de croissance.",
+                    "Évitez les étiquettes et les jugements sur les capacités. Concentrez-vous sur le potentiel de développement et sur les stratégies pour y parvenir, pour vous-même et pour les autres.",
+                    "La neuroplasticité du cerveau : Le cerveau est malléable et capable de se reconfigurer tout au long de la vie. Cette compréhension renforce la conviction que l'apprentissage et le développement sont toujours possibles, quel que soit l'âge.",
+                    "Apprenez à reconnaître quand votre mindset fixe est activé (par exemple, face à une critique ou à un échec) et entraînez-vous consciemment à adopter une réponse de mindset de croissance, en transformant le défi en opportunité."
+                ],
+                professionalUse: "Un guide indispensable pour les managers, les leaders d'équipe, les recruteurs et les professionnels des RH. Il permet de cultiver un environnement de travail où l'apprentissage continu, l'innovation et la résilience face à l'échec sont valorisés. Il aide à motiver les employés, à identifier le potentiel de développement et à construire des équipes plus agiles et adaptables. Pour les entrepreneurs, il encourage à aborder les défis du marché et les pivots stratégiques avec une mentalité d'apprentissage. En appliquant les principes du mindset de croissance, les organisations peuvent améliorer la performance collective, favoriser l'engagement des employés et créer une culture d'excellence et d'adaptabilité, propice à la croissance et à l'innovation.",
+                personalUse: "Transformateur pour la vie personnelle, ce livre offre des outils pour surmonter les peurs de l'échec, développer de nouvelles compétences et cultiver une attitude plus positive face aux défis. Il est essentiel pour les parents qui souhaitent encourager leurs enfants à développer un amour de l'apprentissage et de la persévérance. Il aide à changer sa perception de soi et à reconnaître que les limites sont souvent auto-imposées. En adoptant un mindset de croissance, on peut améliorer ses relations, sa santé mentale et physique, et son bien-être général, en voyant chaque expérience comme une occasion d'apprendre et de devenir une meilleure version de soi-même, débloquant un potentiel illimité.",
+                category: "Mindset",
+                categoryClass: "mindset-cover",
+                icon: "fas fa-seedling"
+            },
+            { id: 22, title: "S'organiser pour réussir avec la méthode Bullet Journal", author: "Ryder Carroll", rating: "★★★★☆", summary: "Le Bullet Journal n'est pas qu'un simple carnet, c'est un système de productivité et de pleine conscience analogique qui permet de suivre le passé, d'organiser le présent et de planifier l'avenir. Conçu par Ryder Carroll, ce livre détaille la philosophie et les techniques derrière cette méthode personnalisable qui combine les avantages d'un journal, d'un agenda, d'une liste de tâches et d'un carnet de notes. L'objectif est de 'suivre moins et accomplir plus' en se débarrassant du superflu et en se concentrant sur ce qui compte vraiment, rendant ainsi la productivité plus intuitive et moins contraignante.\n\nCarroll explique comment les principes fondamentaux du Bullet Journal — l'index, le journal rapide, le journal du futur, du mois, du jour, et les collections — peuvent être adaptés à tout style de vie. Ce livre est un plaidoyer pour l'organisation intentionnelle et la clarté mentale, offrant une alternative numérique aux applications de productivité. Il aide à réduire le stress lié à la surcharge d'informations, à identifier les priorités réelles et à vivre avec plus de pleine conscience. C'est un guide pour ceux qui cherchent une méthode flexible et créative pour gérer leur temps et leurs objectifs, transformant un simple carnet en un puissant outil d'efficacité personnelle et de réflexion.",
+                lessons: [
+                    "Le 'journal rapide' (rapid logging) utilise des puces, des tirets et des cercles pour noter rapidement les tâches, événements et notes, facilitant une capture rapide des informations sans perdre de temps.",
+                    "L'index est essentiel pour retrouver facilement les informations dans votre journal. C'est le sommaire qui relie toutes vos notes, listes et réflexions, rendant le carnet facilement navigable.",
+                    "Les 'journaux du futur, du mois et du jour' offrent une structure pour la planification à long, moyen et court terme, permettant de visualiser les objectifs et les rendez-vous tout en gardant une flexibilité quotidienne.",
+                    "La 'migration' des tâches est un processus de réévaluation clé : les tâches non faites sont soit reportées, soit déplacées vers une collection pertinente, soit éliminées. Cela force à réévaluer constamment l'importance et l'urgence.",
+                    "Créez des 'collections' pour des thèmes spécifiques ou des projets (ex: liste de livres à lire, idées de recettes, suivi d'un projet personnel). Cela centralise les informations et les organise logiquement.",
+                    "Le Bullet Journal est un outil de pleine conscience. Le processus d'écriture manuscrite et de réflexion sur les tâches et les événements permet de ralentir, de prioriser et de vivre avec plus d'intention, réduisant ainsi le stress et l'éparpillement."
+                ],
+                professionalUse: "Utile pour les professionnels qui cherchent une alternative ou un complément aux outils numériques pour organiser leurs tâches, leurs notes de réunion et leurs projets. Le Bullet Journal permet une planification flexible des objectifs de travail, un suivi des idées et des conversations importantes, et une meilleure gestion des informations entrantes. Pour les managers, il peut servir d'outil pour organiser leurs pensées stratégiques, leurs délégations et leurs suivis, tout en encourageant une approche plus minimaliste et moins dépendante des écrans. C'est une méthode efficace pour maintenir la clarté mentale dans un environnement de travail complexe et rapide, en se concentrant sur l'essentiel et en évitant la surcharge d'informations.",
+                personalUse: "Un excellent outil pour gérer la vie quotidienne, les projets personnels, les hobbies et les objectifs de développement personnel. Il aide à suivre les habitudes, à planifier les événements familiaux, à gérer les finances personnelles et à consigner ses pensées et ses gratitudes. Pour ceux qui aiment la créativité et l'écriture manuscrite, c'est une méthode engageante qui permet une personnalisation infinie. En utilisant le Bullet Journal, on peut réduire le stress lié à l'oubli de choses, se sentir plus en contrôle de son temps et de ses engagements, et cultiver une plus grande pleine conscience dans la vie de tous les jours, en transformant le désordre en clarté et la surcharge en simplicité intentionnelle.",
+                category: "Mindset",
+                categoryClass: "mindset-cover",
+                icon: "fas fa-pen-nib"
+            },
+            { id: 23, title: "L'art de ne rien faire", author: "C. Thi Nguyen", rating: "★★★★☆", summary: "Ce livre explore l'idée contre-intuitive que la productivité ne réside pas toujours dans l'action, mais parfois dans la capacité à s'ennuyer ou à ne rien faire. L'auteur, philosophe, soutient que l'ennui est une condition essentielle à la créativité, à la réflexion profonde et à la découverte de soi, des éléments souvent étouffés par notre culture hyper-connectée et obsédée par la performance. Il remet en question la course constante à l'efficacité et la sur-stimulation numérique, plaidant pour des moments de 'rien faire' intentionnels qui permettent à l'esprit de vagabonder et de générer de nouvelles idées. Ce n'est pas un appel à la paresse, mais à une forme de repos actif qui nourrit l'esprit.\n\nLe livre analyse comment la technologie, notamment les réseaux sociaux et les flux d'informations constants, nous prive de cette précieuse opportunité de s'ennuyer, nous poussant vers une consommation passive et superficielle. Il propose une réflexion sur la valeur du temps libre non structuré et l'importance de débrancher pour recharger son esprit. C'est un manifeste pour le droit à l'oisiveté créative et une critique de l'idéologie de la productivité à tout prix, offrant une perspective rafraîchissante sur la façon dont le repos et la contemplation peuvent en réalité être les catalyseurs ultimes de l'innovation et du bien-être, en nous permettant de nous reconnecter avec nos pensées les plus profondes et nos désirs authentiques.",
+                lessons: [
+                    "L'ennui n'est pas un vide à remplir, mais un espace fertile pour la créativité et la réflexion profonde. Il est essentiel de s'autoriser des moments de non-activité pour laisser l'esprit vagabonder et générer de nouvelles idées.",
+                    "La sur-stimulation constante, notamment numérique, nous prive des bienfaits de l'ennui et de la capacité à la réflexion profonde. Apprenez à vous déconnecter intentionnellement pour cultiver un esprit plus clair.",
+                    "Le véritable repos et la régénération ne sont pas synonymes de distraction. Il s'agit de se soustraire aux stimulations extérieures pour permettre à l'esprit de se recharger et de consolider les informations, favorisant ainsi une meilleure performance future.",
+                    "Reconsidérez la valeur du temps libre non structuré. Ce sont souvent dans ces moments d'oisiveté que les solutions aux problèmes complexes émergent ou que les idées les plus innovantes prennent forme.",
+                    "Développez la capacité à résister à l'envie de toujours 'faire' ou d'être 'productif'. Acceptez les moments de calme et d'inactivité comme une partie nécessaire et bénéfique du processus créatif et de la vie équilibrée.",
+                    "La déconnexion numérique intentionnelle est cruciale. Fixez des limites claires à l'utilisation des smartphones et des réseaux sociaux pour libérer du temps et de l'espace mental pour la contemplation et l'engagement avec le monde réel."
+                ],
+                professionalUse: "Pertinent pour les leaders et les équipes créatives qui cherchent à stimuler l'innovation et à éviter l'épuisement professionnel. Ce livre encourage à intégrer des pauses, des périodes de réflexion et même des moments d'ennui structuré dans les processus de travail pour favoriser la créativité et la résolution de problèmes non conventionnelle. Il aide à remettre en question la culture du 'toujours occupé' et à valoriser la qualité de la pensée sur la quantité de travail. Pour les managers, il incite à créer des environnements où le droit à la déconnexion est respecté et où l'on comprend que la régénération est une composante essentielle de la productivité durable, et non une perte de temps. Il peut être utilisé pour repenser les réunions, les sprints créatifs et les périodes de réflexion stratégique.",
+                personalUse: "Un guide rafraîchissant pour les individus qui se sentent constamment sous pression pour être productifs et qui souffrent de surcharge mentale. Il offre une justification intellectuelle pour ralentir, se déconnecter et s'autoriser à simplement 'être'. Ce livre aide à combattre l'anxiété liée à la FOMO (Fear Of Missing Out) et à trouver la paix dans les moments de silence et de contemplation. Il encourage à réévaluer sa relation avec la technologie et à créer un équilibre plus sain. En adoptant les principes de ce livre, on peut cultiver une plus grande pleine conscience, une créativité accrue et un bien-être général, en redécouvrant la richesse des moments non planifiés et en appréciant la valeur intrinsèque de l'existence au-delà de la performance.",
+                category: "Mindset",
+                categoryClass: "mindset-cover",
+                icon: "fas fa-yin-yang"
+            },
+            { id: 24, title: "L'effet cumulé", author: "Darren Hardy", rating: "★★★★★", summary: "L'effet cumulé est un principe simple mais puissant : chaque petite décision, bonne ou mauvaise, chaque petite action, insignifiante en apparence, s'accumule avec le temps pour produire des résultats massifs. Darren Hardy démontre que le succès n'est pas le fruit d'une chance soudaine ou de transformations radicales, mais le résultat prévisible de petites disciplines quotidiennes répétées sur le long terme. Le livre explore comment ces micro-actions, souvent imperceptibles au début, finissent par créer un écart exponentiel entre ceux qui les pratiquent et ceux qui les ignorent.\n\nHardy met en lumière l'importance de la régularité, de la patience et de la persévérance. Il fournit des outils pratiques pour suivre ses progrès, se maintenir motivé, identifier et éliminer les mauvaises habitudes, et tirer parti des leviers de l'effet cumulé. Ce n'est pas un guide pour des solutions rapides, mais une feuille de route pour une transformation durable dans tous les aspects de la vie : finances, relations, santé et carrière. C'est un rappel puissant que la constance des petites actions positives est la véritable clé pour réaliser des objectifs extraordinaires, en transformant le potentiel en réalité par l'accumulation progressive de choix délibérés.",
+                lessons: [
+                    "Les petites actions quotidiennes, positives ou négatives, s'accumulent pour créer des résultats massifs et disproportionnés sur le long terme. Soyez conscient de l'impact cumulé de vos micro-décisions.",
+                    "La cohérence est plus importante que l'intensité. Mieux vaut faire de petites actions positives chaque jour que des efforts intenses mais sporadiques. La régularité crée un effet boule de neige.",
+                    "Le temps est votre allié si vous êtes constant dans de bonnes habitudes. La patience et la persévérance sont essentielles pour voir les fruits de l'effet cumulé, car les résultats ne sont pas immédiats.",
+                    "Identifiez et éliminez les 'petites mauvaises habitudes' (small bad habits) qui, bien que mineures individuellement, peuvent saboter vos progrès lorsqu'elles sont répétées quotidiennement.",
+                    "Suivez et mesurez vos progrès. Le suivi conscient de vos actions et de leurs résultats renforce la motivation et vous permet de voir l'effet cumulé à l'œuvre, même lorsque les changements sont lents au début.",
+                    "Utilisez le 'pouvoir des choix' : chaque choix que vous faites, même minime, vous rapproche ou vous éloigne de vos objectifs. Soyez intentionnel dans vos décisions quotidiennes, car elles s'additionnent."
+                ],
+                professionalUse: "Incontournable pour les entrepreneurs, les professionnels de la vente, et tous ceux qui visent une croissance continue dans leur carrière. Ce livre aide à comprendre que le succès professionnel est le fruit de disciplines quotidiennes, comme le suivi rigoureux des prospects, l'amélioration continue des compétences ou la gestion efficace du temps. Il encourage à mettre en place des systèmes qui garantissent de petites victoires quotidiennes qui, à terme, se transforment en succès majeurs. Pour les managers, il incite à promouvoir une culture de l'amélioration continue et de la persévérance, en valorisant les efforts réguliers plutôt que les résultats sporadiques, et en montrant comment les petits ajustements dans les processus peuvent mener à une efficacité opérationnelle exponentielle et à une meilleure performance globale de l'équipe.",
+                personalUse: "Un guide pratique pour transformer sa vie personnelle dans tous les domaines : santé, finances, relations et bien-être. Il aide à mettre en place de petites habitudes positives (comme l'épargne quotidienne, l'exercice de 15 minutes, la lecture régulière ou les gestes d'appréciation envers ses proches) qui, sur le long terme, produisent des résultats remarquables. Ce livre donne la motivation nécessaire pour persévérer à travers les plateaux et les moments de doute, en rappelant que chaque petite action compte. C'est un plan d'action pour le développement personnel durable, qui transforme les rêves en réalités tangibles par la puissance de la constance et de la discipline simple, rendant les objectifs ambitieux atteignables par des moyens quotidiens.",
+                category: "Mindset",
+                categoryClass: "mindset-cover",
+                icon: "fas fa-infinity"
+            },
+            { id: 25, title: "Commencer par le Pourquoi", author: "Simon Sinek", rating: "★★★★★", summary: "Ce livre fondamental de Simon Sinek explore l'idée que les grands leaders et les organisations qui réussissent ne se concentrent pas sur *ce qu'ils font* ou *comment ils le font*, mais sur *pourquoi ils le font*. Le 'pourquoi' est la raison d'être, la croyance fondamentale, la cause profonde qui inspire l'action. Sinek introduit le concept du 'Cercle d'Or' (Golden Circle) – Pourquoi, Comment, Quoi – et démontre que les entreprises et les individus qui communiquent en partant du pourquoi sont ceux qui inspirent la loyauté, la confiance et l'innovation. Il explique que les gens n'achètent pas ce que vous faites, mais pourquoi vous le faites.\n\nÀ travers des exemples emblématiques comme Apple, Martin Luther King Jr. et les frères Wright, Sinek illustre comment la clarté du pourquoi permet de rallier des suiveurs, de construire des marques fortes et de maintenir la résilience face à l'adversité. Le livre est un plaidoyer pour une pensée et une communication basées sur l'inspiration, et une invitation à découvrir sa propre raison d'être profonde, que ce soit en tant qu'individu ou en tant qu'organisation. C'est un guide essentiel pour le leadership authentique, la construction d'équipes motivées et la création d'un impact durable dans le monde. Comprendre son pourquoi est la première étape pour inspirer les autres et soi-même.",
+                lessons: [
+                    "Tous les grands leaders et les organisations qui réussissent 'commencent par le Pourquoi'. Comprendre et communiquer votre raison d'être (votre 'Pourquoi') est plus important que de savoir ce que vous faites ou comment vous le faites.",
+                    "Le 'Cercle d'Or' (Pourquoi, Comment, Quoi) est un modèle puissant pour la communication et le leadership. Commencez toujours par le Pourquoi, car c'est ce qui inspire la confiance et la loyauté.",
+                    "Les gens n'achètent pas ce que vous faites, mais pourquoi vous le faites. Une raison d'être claire et inspirante attire non seulement des clients, mais aussi des employés et des partenaires qui partagent vos valeurs.",
+                    "Un Pourquoi clair offre une boussole pour la prise de décision. Il aide à rester fidèle à ses valeurs et à sa mission, surtout face à des opportunités ou des défis qui pourraient vous écarter de votre chemin.",
+                    "La confiance est construite en partant du Pourquoi. Lorsque les gens croient en vos motivations, ils sont plus enclins à vous faire confiance, à collaborer et à vous suivre, même lorsque les choses sont difficiles.",
+                    "Le Pourquoi n'est pas un objectif à atteindre, mais une cause à laquelle adhérer. Il est constant, intemporel et sert de fondation pour toutes vos actions et stratégies, vous guidant de manière cohérente."
+                ],
+                professionalUse: "Fondamental pour les entrepreneurs, les dirigeants d'entreprise, les responsables marketing et les professionnels des ventes. Il fournit un cadre pour définir la mission et la vision d'une organisation, développer une culture d'entreprise forte et inspirante, et créer des messages marketing qui résonnent profondément avec le public cible. Il aide à recruter et à retenir des talents qui partagent les valeurs de l'entreprise, à construire des partenariats solides et à naviguer les défis avec une clarté de direction. Les entreprises qui maîtrisent leur Pourquoi sont plus résilientes, plus innovantes et plus capables d'inspirer la loyauté des employés et des clients, ce qui est un avantage compétitif majeur.",
+                personalUse: "Un puissant outil d'auto-réflexion pour trouver un sens et une direction à sa vie personnelle et professionnelle. Il encourage à explorer ses motivations profondes, ses valeurs et ses croyances fondamentales pour mieux comprendre pourquoi on fait ce que l'on fait. Cela peut aider à aligner ses actions quotidiennes avec ses aspirations les plus profondes, à prendre des décisions plus éclairées concernant sa carrière, ses relations et ses objectifs de vie. En découvrant votre propre Pourquoi, vous pouvez vivre une vie plus authentique, plus inspirée et plus significative, attirant les opportunités et les personnes qui résonnent avec votre véritable but, et vous aidant à surmonter les obstacles avec une clarté et une conviction renouvelées.",
+                category: "Mindset",
+                categoryClass: "mindset-cover",
+                icon: "fas fa-question"
+            },
+            { id: 26, title: "Les 7 habitudes des gens très efficaces", author: "Stephen Covey", rating: "★★★★★", summary: "Ce livre fondateur offre un cadre holistique pour l'efficacité personnelle et interpersonnelle. Stephen Covey présente une approche basée sur des principes pour résoudre les problèmes personnels et professionnels, en se concentrant sur la transformation intérieure avant de chercher à influencer l'extérieur. Il développe sept habitudes qui guident vers la maturité, de la dépendance à l'interdépendance, en passant par l'indépendance. Il met l'accent sur l'importance de l'intégrité, de l'honnêteté et de la dignité humaine comme fondements d'une vie équilibrée et productive. C'est un guide pour une vie pleine de sens et d'impact, plutôt qu'une simple liste de techniques.\n\nCovey soutient que le succès durable ne vient pas de 'techniques rapides' mais d'un changement profond de caractère basé sur des principes universels et intemporels. Chaque habitude est expliquée en profondeur, avec des exemples et des exercices pour faciliter leur intégration. Le livre est structuré de manière à construire progressivement une efficacité personnelle ('victoires privées') avant de passer à l'efficacité interpersonnelle ('victoires publiques'). Il met en avant l'importance d'une 'éthique du caractère' par opposition à une simple 'éthique de la personnalité', qui se concentre sur les traits de surface. C'est une œuvre qui continue d'inspirer des millions de personnes à travers le monde à vivre avec plus d'intégrité, de but et d'efficacité.",
+                lessons: [
+                    "Soyez proactif : Prenez l'initiative et la responsabilité de votre vie. Ne laissez pas les circonstances dicter votre réaction; choisissez votre réponse en fonction de vos valeurs et principes, et agissez en conséquence, en vous concentrant sur votre cercle d'influence.",
+                    "Commencez par la fin en tête : Définissez clairement vos objectifs et ce que vous voulez accomplir avant de commencer. Avoir une vision claire de votre destination guide vos actions et décisions quotidiennes, en créant une feuille de route mentale.",
+                    "Mettez les priorités aux priorités : Gérez votre temps et votre énergie en vous concentrant sur ce qui est le plus important (Quadrant II - important mais non urgent), pas seulement ce qui est urgent. Identifiez les activités de planification, de prévention et de construction de relations.",
+                    "Pensez gagnant-gagnant : Recherchez des solutions qui bénéficient à toutes les parties impliquées dans les interactions. Favorisez la coopération plutôt que la compétition, bâtissant ainsi des relations solides et durables basées sur la confiance mutuelle et le respect.",
+                    "Cherchez d'abord à comprendre, ensuite à être compris : Écoutez attentivement et empathiquement avant de présenter votre propre point de vue. Cela conduit à une meilleure compréhension, à la résolution de conflits et à une communication plus efficace et respectueuse.",
+                    "Synergisez : Travaillez en équipe pour créer de nouvelles solutions qui sont meilleures que ce que chaque individu pourrait produire seul. La synergie est la capacité de valoriser les différences, les perspectives variées et d'en tirer parti pour une créativité collective et des résultats supérieurs.",
+                    "Aiguisez la scie : Renouvelez-vous physiquement, mentalement, spirituellement et socialement. Prenez du temps pour le repos, l'apprentissage continu, la méditation, l'exercice et les relations significatives, afin de maintenir votre énergie et votre capacité à performer sur le long terme et à prévenir l'épuisement."
+                ],
+                professionalUse: "Un pilier pour le leadership, la gestion d'équipe et le développement organisationnel. Il aide les professionnels à développer une vision claire, à prioriser les tâches stratégiques, à améliorer la communication interpersonnelle et à favoriser une culture de collaboration et de confiance. C'est particulièrement utile pour les managers cherchant à optimiser la productivité de leur équipe, à résoudre les conflits interpersonnels et à bâtir des relations client durables. Il fournit des outils pour une planification stratégique plus efficace, une délégation pertinente et un développement des employés basé sur des principes éthiques et une compréhension profonde de la nature humaine, menant à une performance organisationnelle durable et éthique.",
+                personalUse: "Transformateur pour la vie personnelle, ce livre offre des stratégies pour gérer le temps, établir des relations plus profondes et atteindre un équilibre de vie sain et épanouissant. Il guide les individus à travers un processus de découverte de leurs valeurs fondamentales, à les aligner avec leurs actions et à devenir plus responsables de leur propre bonheur et succès. Il aide à surmonter les défis quotidiens avec une perspective positive et proactive, à cultiver une paix intérieure et à maintenir un sentiment de bien-être physique et mental, tout en bâtissant et en maintenant des relations significatives avec la famille et les amis. C'est un guide complet pour une vie vécue avec intention, intégrité et un impact durable sur soi et sur les autres.",
+                category: "Mindset",
+                categoryClass: "mindset-cover",
+                icon: "fas fa-brain"
+            },
+            { id: 27, title: "Le pouvoir de l'intention", author: "Wayne Dyer", rating: "★★★★★", summary: "Ce livre explore l'intention non pas comme une simple force mentale, mais comme une énergie universelle que nous pouvons puiser et manifester dans nos vies. Wayne Dyer, un maître de la pensée positive et du développement personnel, soutient que l'intention est une force créatrice omniprésente, et que nous sommes tous connectés à elle. Il invite les lecteurs à s'aligner avec cette intention supérieure pour attirer l'abondance, le succès et le bien-être dans tous les domaines de leur existence. Dyer déconstruit les mythes de l'égo et de l'effort forcé, plaidant pour une approche plus fluide et plus spirituelle de la réalisation des désirs.\n\nLe livre est divisé en trois parties : la première explore l'intention en tant que concept universel, la deuxième décrit la façon de s'y aligner personnellement, et la troisième montre comment appliquer cette connexion pour manifester ses désirs. Il encourage à dépasser les peurs, à abandonner les jugements et à vivre avec amour et gentillesse. C'est une œuvre qui fusionne la spiritualité orientale avec les principes du succès occidental, offrant un chemin vers une vie plus joyeuse, plus significative et plus puissante en reconnaissant notre capacité innée à co-créer notre réalité avec l'univers. Il s'agit de changer son état d'être pour attirer ce que l'on désire, plutôt que de lutter pour l'obtenir.",
+                lessons: [
+                    "L'intention est une énergie universelle présente en tout. Nous pouvons puiser dans cette force créatrice et nous y aligner pour manifester nos désirs et objectifs les plus profonds.",
+                    "Vivre en alignement avec l'intention supérieure implique de cultiver des qualités comme l'amour, la gentillesse, la beauté, l'expansion, l'abondance et la réceptivité, car ce sont les attributs de l'intention elle-même.",
+                    "Lâcher prise sur le besoin de contrôler et sur les attachements aux résultats. Faites confiance au processus universel et sachez que l'intention se manifeste de la manière la plus appropriée, même si ce n'est pas celle que vous attendiez.",
+                    "Éliminez les croyances limitantes et les pensées négatives qui vous séparent de l'intention. L'égo et la peur sont des obstacles à la manifestation; cultivez la conscience et la confiance.",
+                    "La gratitude est une vibration puissante qui attire plus d'abondance. Pratiquez la gratitude quotidienne pour ce que vous avez et pour ce qui est en train de se manifester, renforçant ainsi votre alignement avec l'intention.",
+                    "Les signes et les synchronicités sont des indications que vous êtes aligné avec l'intention. Soyez attentif à ces messages de l'univers, car ils vous guident sur votre chemin de manifestation et de réalisation."
+                ],
+                professionalUse: "Utile pour les entrepreneurs, les créatifs et les professionnels cherchant à innover et à manifester des projets ambitieux. Il encourage à définir des intentions claires pour leurs objectifs de carrière, à attirer les bonnes opportunités et les bonnes personnes, et à surmonter les obstacles avec une foi inébranlable dans le processus. Il peut aider à développer une vision plus grande que soi pour son entreprise ou son rôle, à inspirer ses équipes avec une énergie positive et à attirer l'abondance financière. En cultivant une intention élevée et en alignant leurs actions sur cette intention, les professionnels peuvent créer des résultats qui dépassent leurs attentes traditionnelles, et développer une approche du succès plus fluide et moins stressante.",
+                personalUse: "Un guide puissant pour la transformation personnelle et spirituelle. Il offre des outils pour surmonter les schémas de pensée négatifs, attirer des relations saines, améliorer sa santé et trouver un sens plus profond à la vie. Il encourage à vivre avec plus de joie, de paix et de gratitude, et à voir la vie comme un processus de co-création. En appliquant les principes de l'intention, on peut manifester des rêves personnels, cultiver une plus grande sérénité face aux défis et se sentir connecté à une force universelle. C'est un livre qui inspire à vivre une vie sans limites, en se reconnectant à son potentiel illimité et en embrassant une existence empreinte de synchronicité et d'abondance.",
+                category: "Mindset",
+                categoryClass: "mindset-cover",
+                icon: "fas fa-magic"
+            },
+            // --- FINANCE PERSONNELLE (9 Livres - Placeholder) ---
+            { id: 28, title: "Réfléchissez et devenez riche", author: "Napoleon Hill", rating: "★★★★★", summary: "Basé sur plus de vingt ans de recherche et des interviews de plus de 500 des individus les plus prospères de son époque, ce livre intemporel de Napoleon Hill est un guide complet pour atteindre la réussite financière et personnelle. Il révèle les treize principes clés de la prospérité, allant du désir ardent à la planification organisée, en passant par la persévérance et le pouvoir de l'esprit maître. Plus qu'un simple livre sur l'argent, c'est une philosophie de vie qui enseigne comment transformer le désir en réalité, en exploitant la puissance de la pensée et de l'action délibérée pour manifester l'abondance dans tous les aspects de l'existence.\n\nHill ne promet pas de richesse instantanée, mais un chemin éprouvé pour la créer par l'application rigoureuse de principes psychologiques et pratiques. Il insiste sur le rôle crucial de la pensée, de la foi en ses capacités, de l'autosuggestion et de la planification méthodique. Chaque chapitre détaille un principe, avec des exemples de figures historiques qui les ont appliqués pour atteindre des sommets de succès. C'est une œuvre qui met l'accent sur la transformation intérieure et l'état d'esprit comme fondements de la richesse durable, et non pas sur des astuces financières. Il s'agit de maîtriser son propre esprit pour maîtriser son destin financier et personnel.",
+                lessons: [
+                    "Un désir ardent et une intention claire sont les points de départ de toute réussite significative. Sans une aspiration brûlante, la motivation pour surmonter les obstacles sera insuffisante et le progrès limité.",
+                    "La foi en sa propre capacité à atteindre ses objectifs est essentielle. Visualisez et croyez en votre succès avec une conviction inébranlable pour attirer les opportunités et les ressources nécessaires, transformant la croyance en réalité.",
+                    "L'autosuggestion permet de programmer l'esprit subconscient avec des pensées positives et des objectifs clairs. Répéter des affirmations et se visualiser en possession de la richesse souhaitée renforce la confiance et l'alignement avec les ambitions.",
+                    "L'importance de la connaissance spécialisée et de l'apprentissage continu. Il ne s'agit pas seulement d'accumuler des informations, mais de savoir comment les organiser et les utiliser pour un objectif spécifique et pratique.",
+                    "Le concept de l'esprit maître (Master Mind) : s'allier avec des personnes partageant les mêmes idées pour atteindre un objectif commun. L'énergie combinée et les connaissances diversifiées de ce groupe sont exponentiellement plus puissantes que les efforts individuels.",
+                    "La persévérance est une qualité indispensable pour surmonter les échecs et les revers. La capacité de continuer malgré l'adversité, les critiques et les déceptions est ce qui distingue ceux qui réussissent de ceux qui abandonnent trop tôt."
+                ],
+                professionalUse: "Ce classique est une ressource inestimable pour les entrepreneurs, les cadres et toute personne souhaitant accélérer sa carrière et atteindre l'indépendance financière. Il enseigne comment développer un état d'esprit de réussite, fixer des objectifs ambitieux, élaborer des plans stratégiques et construire des réseaux puissants. Les principes de Hill sont applicables pour le développement de nouvelles entreprises, l'innovation de produits, la gestion d'équipes et l'expansion des opportunités de marché. Il aide à cultiver la résilience face aux défis économiques et à développer une vision claire pour la prospérité professionnelle, en transformant les idées en projets concrets et lucratifs.",
+                personalUse: "Fondamental pour quiconque aspire à l'indépendance financière, à la liberté matérielle ou à la réalisation de rêves personnels. Au-delà de l'argent, il offre une méthodologie pour définir et atteindre n'importe quel objectif de vie, qu'il s'agisse d'améliorer sa santé, de cultiver des relations épanouissantes ou de développer ses talents. Il encourage une pensée proactive, la visualisation créative et la persévérance face aux défis, transformant ainsi les aspirations en réalités tangibles et un sentiment d'accomplissement profond. C'est un guide pour prendre le contrôle de son destin financier et personnel, et pour manifester l'abondance dans tous les aspects de son existence en exploitant le pouvoir illimité de son esprit.",
+                category: "Finance Personnelle",
+                categoryClass: "financepersonnelle-cover",
+                icon: "fas fa-dollar-sign"
+            },
+            { id: 29, title: "L'investisseur intelligent", author: "Benjamin Graham", rating: "★★★★★", summary: "Considéré comme la bible de l'investissement de valeur, ce livre est une ressource indispensable pour tout investisseur sérieux. Benjamin Graham, le mentor de Warren Buffett, y expose ses principes intemporels d'investissement axés sur la minimisation des risques et la maximisation des gains à long terme. Il introduit des concepts clés comme la 'marge de sécurité' et l''investisseur-value', enseignant aux lecteurs comment analyser les entreprises pour trouver celles qui sont sous-évaluées par le marché. Graham met l'accent sur la patience, la discipline et la résistance aux fluctuations émotionnelles du marché.\n\nCe n'est pas un guide pour spéculer ou devenir riche rapidement, mais un manuel pour l'investissement prudent et réfléchi. Graham distingue l'investissement (basé sur une analyse rigoureuse et une recherche de valeur) de la spéculation (basée sur les tendances du marché et les émotions). Le livre fournit des outils concrets pour évaluer les actions et les obligations, et pour construire un portefeuille résilient. C'est une lecture obligatoire pour comprendre les fondements de l'investissement intelligent, protéger son capital et assurer une croissance patrimoniale stable sur le long terme, en adoptant une approche rationnelle et disciplinée face aux marchés financiers.",
+                lessons: [
+                    "Distinguez clairement l'investissement de la spéculation. L'investisseur analyse la valeur intrinsèque d'une entreprise, tandis que le spéculateur parie sur les fluctuations à court terme du marché.",
+                    "Appliquez le concept de 'marge de sécurité' : n'achetez des titres que lorsque leur prix de marché est significativement inférieur à leur valeur intrinsèque, afin de vous protéger contre les erreurs de jugement et les revers du marché.",
+                    "Considérez les actions comme des parts de propriété d'une entreprise, et non comme de simples tickets de loterie. Votre analyse doit se concentrer sur la santé financière et les perspectives à long terme de l'entreprise.",
+                    "Ignorez les fluctuations du marché à court terme. Le marché boursier est comme 'Monsieur le Marché' : il peut être euphorique ou déprimé, mais un investisseur intelligent ne le laisse pas dicter ses décisions. Utilisez la volatilité à votre avantage.",
+                    "Diversifiez votre portefeuille pour réduire les risques. Ne mettez pas tous vos œufs dans le même panier, même si vous êtes confiant dans une seule entreprise.",
+                    "Ayez une approche contrariante : lorsque les autres sont avides, soyez prudent; lorsque les autres sont effrayés, soyez audacieux. L'investissement de valeur implique souvent d'acheter quand personne d'autre ne le veut et de vendre quand tout le monde est optimiste."
+                ],
+                professionalUse: "Indispensable pour les gestionnaires de fonds, les analystes financiers, les consultants en investissement et les professionnels de la finance. Ce livre fournit les fondements conceptuels et les méthodes d'analyse pour évaluer les entreprises, gérer les portefeuilles de clients et prendre des décisions d'investissement solides. Il aide à développer une approche disciplinée et à long terme, essentielle pour naviguer dans la complexité des marchés financiers et pour conseiller les clients sur des stratégies d'investissement durables. Il est également pertinent pour les entrepreneurs qui souhaitent mieux comprendre la valorisation d'entreprise et les principes qui attirent les investisseurs de qualité, ou pour les cadres qui gèrent les finances de leur entreprise.",
+                personalUse: "Un guide essentiel pour tout individu souhaitant prendre en main ses finances personnelles et investir son argent de manière intelligente. Il permet de comprendre les bases de l'investissement boursier sans se laisser influencer par le bruit du marché. Il enseigne la patience, la discipline et l'importance de la recherche pour construire un patrimoine à long terme. Il est particulièrement utile pour ceux qui veulent éviter les erreurs courantes des investisseurs amateurs et pour ceux qui cherchent à sécuriser leur avenir financier en adoptant une stratégie d'investissement solide et éprouvée, axée sur la valeur et la prudence, plutôt que sur des spéculations risquées. C'est un livre pour ceux qui veulent la liberté financière durable.",
+                category: "Finance Personnelle",
+                categoryClass: "financepersonnelle-cover",
+                icon: "fas fa-chart-line"
+            },
+            { id: 30, title: "Père riche, père pauvre", author: "Robert Kiyosaki", rating: "★★★★☆", summary: "Ce livre est un best-seller mondial qui défie les idées reçues sur l'argent, l'éducation et l'investissement. Robert Kiyosaki partage les leçons qu'il a apprises de ses 'deux pères' : son père biologique, très instruit mais pauvre, et le père de son meilleur ami, un entrepreneur autodidacte et riche. Il expose les différences fondamentales dans leur approche de l'argent, du travail et de l'investissement. Kiyosaki soutient que l'école prépare les enfants à devenir des employés, tandis que les riches enseignent à leurs enfants à comprendre le fonctionnement de l'argent et à le faire travailler pour eux.\n\nLe livre introduit des concepts clés comme la différence entre un actif et un passif, l'importance de l'intelligence financière, la création de revenus passifs et le rôle de l'immobilier et de l'entrepreneuriat. C'est une invitation à remettre en question le chemin traditionnel 'étudier, trouver un bon emploi, épargner' et à envisager des voies alternatives vers la liberté financière. Père riche, père pauvre est un manifeste pour l'éducation financière non conventionnelle, poussant les lecteurs à sortir de la 'rat race' en développant des compétences financières et en investissant dans des actifs qui génèrent des revenus, plutôt que de dépendre uniquement d'un salaire.",
+                lessons: [
+                    "Les riches n'achètent pas des passifs en pensant que ce sont des actifs. Apprenez la différence fondamentale entre un actif (ce qui met de l'argent dans votre poche) et un passif (ce qui en sort).",
+                    "Travailler pour apprendre, pas pour l'argent. Concentrez-vous sur l'acquisition de compétences financières et commerciales qui vous permettront de créer vos propres opportunités et revenus, plutôt que de vous limiter à un salaire.",
+                    "L'importance de l'intelligence financière : développer des compétences en comptabilité, en investissement, en marketing et en droit pour prendre des décisions financières éclairées et créer de la richesse.",
+                    "Créez des revenus passifs. Concentrez-vous sur l'acquisition d'actifs (immobilier, entreprises, actions) qui génèrent des revenus sans que vous ayez à travailler activement pour eux.",
+                    "N'ayez pas peur de prendre des risques calculés. L'éducation financière et la compréhension des marchés permettent de minimiser les risques et de maximiser les opportunités d'investissement, contrairement à l'ignorance qui est le plus grand risque.",
+                    "Votre maison n'est pas un actif si elle ne génère pas de revenu. Reconsidérez la définition traditionnelle de l'actif et du passif dans votre vie financière personnelle."
+                ],
+                professionalUse: "Très pertinent pour les entrepreneurs en herbe, les créateurs d'entreprise et les professionnels qui envisagent l'investissement immobilier ou boursier. Il fournit une mentalité d'investisseur et d'entrepreneur, encourageant à penser au-delà d'un salaire fixe et à créer des sources de revenus multiples. Il aide à comprendre comment structurer les affaires pour générer des actifs et à développer une vision à long terme pour la croissance financière. C'est un excellent point de départ pour ceux qui veulent sortir du salariat et se lancer dans le monde de l'investissement ou de la création d'entreprise, en développant une vision d'indépendance financière et de création de valeur.",
+                personalUse: "Un livre incontournable pour quiconque souhaite améliorer sa littératie financière personnelle et sortir de la 'rat race'. Il encourage à remettre en question l'éducation financière traditionnelle et à adopter une approche plus proactive de la gestion de l'argent. Il aide à identifier les opportunités d'investissement, à comprendre les bases de la comptabilité personnelle et à changer sa perception du travail et de l'argent. Ce livre est idéal pour ceux qui veulent enseigner à leurs enfants les principes de l'intelligence financière dès leur plus jeune âge, et pour les adultes qui cherchent à bâtir un patrimoine et à atteindre la liberté financière par l'investissement et la création d'actifs, plutôt que par l'endettement et la consommation.",
+                category: "Finance Personnelle",
+                categoryClass: "financepersonnelle-cover",
+                icon: "fas fa-money-bill-wave"
+            },
+            { id: 31, title: "L'homme le plus riche de Babylone", author: "George S. Clason", rating: "★★★★★", summary: "Ce classique de la finance personnelle est présenté sous la forme de paraboles issues de l'ancienne Babylone, la cité la plus riche de son temps. À travers les récits de personnages comme Arkad, le plus riche des Babyloniens, George S. Clason enseigne les principes intemporels de la richesse, de l'épargne, de l'investissement et de la gestion de l'argent. Les leçons sont simples mais profondes : 'Commencez à remplir votre bourse', 'Contrôlez vos dépenses', 'Faites fructifier votre or', 'Protégez vos trésors des pertes', et 'Rendez votre maison un investissement rentable'.\n\nCes paraboles, accessibles et engageantes, démontrent que les lois de la prospérité sont universelles et n'ont pas changé au fil des millénaires. Le livre est un excellent point de départ pour quiconque débute dans la gestion de ses finances ou cherche à renforcer des bases financières solides. Il met l'accent sur la discipline, la planification à long terme et la sagesse dans les décisions financières, offrant une feuille de route claire pour passer de la pénurie à l'abondance. C'est une œuvre qui prouve que les principes du succès financier sont intemporels et à la portée de tous ceux qui choisissent de les appliquer avec diligence et persévérance.",
+                lessons: [
+                    "Commencez à remplir votre bourse : Épargnez au moins 10% de tous vos revenus. C'est le premier pas fondamental vers l'accumulation de richesse, car l'argent que vous ne dépensez pas est de l'argent que vous pouvez investir.",
+                    "Contrôlez vos dépenses : Ne laissez pas vos désirs dépasser vos revenus. Distinguez les besoins des désirs et établissez un budget pour vous assurer que vos dépenses ne grignotent pas vos économies.",
+                    "Faites fructifier votre or : Investissez votre épargne judicieusement pour qu'elle génère plus d'argent. Faites travailler votre argent pour vous, plutôt que de travailler toute votre vie pour de l'argent.",
+                    "Protégez vos trésors des pertes : Soyez prudent avec vos investissements. Consultez des experts, évitez les schémas de richesse rapide et protégez votre capital avant tout. La sécurité de votre investissement est primordiale.",
+                    "Rendez votre maison un investissement rentable : Posséder sa propre maison peut être une source de stabilité financière et un actif précieux, à condition de la gérer intelligemment.",
+                    "Augmentez votre capacité à gagner : Investissez en vous-même par l'apprentissage et le développement de compétences. Votre capacité à générer des revenus est votre plus grand atout. Cherchez constamment à vous améliorer et à augmenter votre valeur."
+                ],
+                professionalUse: "Utile pour les professionnels qui cherchent à appliquer des principes financiers sains à leur carrière ou à leur entreprise. Les leçons sur l'épargne et l'investissement peuvent être transposées à la gestion des fonds d'une entreprise ou à la planification de l'expansion. Il encourage une approche disciplinée de la gestion des ressources et des investissements, ce qui est crucial pour la survie et la croissance d'une entreprise. Pour les entrepreneurs, il offre une mentalité de prudence et de croissance à long terme, aidant à éviter les pièges financiers courants et à construire une entreprise solide sur des fondations financières saines, en appliquant des principes intemporels de richesse.",
+                personalUse: "Un excellent point de départ pour quiconque souhaite acquérir une sagesse financière de base et bâtir un avenir prospère. Il rend les concepts financiers complexes accessibles et motivants grâce à ses récits. Il est parfait pour ceux qui veulent apprendre à épargner, à investir prudemment et à éviter l'endettement. Ce livre inspire à prendre le contrôle de ses finances, à planifier pour la retraite et à enseigner ces principes aux jeunes générations. En appliquant les 'Sept Remèdes Contre une Bourse Maigre', les lecteurs peuvent transformer progressivement leur situation financière, passer de la dépendance à l'indépendance, et atteindre la liberté financière qu'ils désirent, en suivant une feuille de route éprouvée.",
+                category: "Finance Personnelle",
+                categoryClass: "financepersonnelle-cover",
+                icon: "fas fa-coins"
+            },
+            { id: 32, title: "Your Money or Your Life", author: "Vicki Robin & Joe Dominguez", rating: "★★★★★", summary: "Ce livre emblématique de la philosophie de l'indépendance financière propose une approche radicalement différente de l'argent. Plutôt que de se concentrer sur l'accumulation de richesses, il invite à redéfinir la relation à l'argent en le mesurant en 'énergie vitale' – le temps que vous échangez contre de l'argent. Vicki Robin et Joe Dominguez proposent un programme en neuf étapes pour transformer votre vie financière et atteindre la liberté. Il ne s'agit pas seulement d'épargner et d'investir, mais de réévaluer vos dépenses en fonction de vos valeurs, de minimiser votre impact sur l'environnement et de vivre une vie plus riche en sens, avec moins de stress et de dépendance à la consommation.\n\nLe livre explore des concepts profonds comme le 'point de croisement' (où les revenus passifs dépassent les dépenses), l'importance de la pleine conscience financière et la recherche de la satisfaction par le contentement plutôt que par la possession. C'est un guide pour une vie de frugalité intentionnelle et de liberté, en vous aidant à vous libérer de la 'rat race' et à trouver un équilibre entre le travail, les loisirs et la contribution à la société. Il pousse le lecteur à une introspection sur ce qui apporte réellement de la valeur et du bonheur dans la vie, au-delà de l'argent.",
+                lessons: [
+                    "Mesurez l'argent en 'énergie vitale' : le temps que vous passez à travailler pour le gagner. Cela permet de prendre des décisions de dépenses plus conscientes et de valoriser votre temps plus que l'argent lui-même.",
+                    "Faites le suivi de chaque centime qui entre et sort de votre vie pour comprendre où va votre argent et identifier les domaines où vous pouvez optimiser vos dépenses.",
+                    "Apprenez à distinguer vos 'besoins' de vos 'désirs'. En réduisant les dépenses superflues, vous libérez de l'énergie vitale et accélérez votre chemin vers l'indépendance financière.",
+                    "Le 'Point de Croisement' : le moment où vos revenus provenant de vos investissements (passifs) dépassent vos dépenses mensuelles. C'est l'objectif ultime de l'indépendance financière, vous permettant de ne plus dépendre d'un emploi.",
+                    "Trouvez la satisfaction dans le contentement plutôt que dans la consommation. Le vrai bonheur ne vient pas de l'accumulation de biens, mais de la clarté, de la liberté et des relations significatives.",
+                    "Réévaluez vos dépenses en fonction de vos valeurs. Chaque dépense doit être alignée avec ce qui est vraiment important pour vous, afin de ne pas gaspiller votre énergie vitale sur des choses insignifiantes."
+                ],
+                professionalUse: "Peut inspirer les professionnels à réévaluer leur carrière en fonction de leur 'énergie vitale' et à chercher des voies qui offrent plus de sens et de liberté, plutôt que de se contenter d'un salaire élevé. Il encourage à une utilisation plus consciente des ressources de l'entreprise et à une approche plus frugale des dépenses professionnelles. Pour les entrepreneurs, il offre une perspective sur la construction d'entreprises qui génèrent des revenus passifs et qui s'alignent avec des valeurs profondes, plutôt que de simplement courir après le profit. Il est utile pour développer une vision à long terme de sa carrière et de ses finances qui transcende la simple réussite matérielle, en se concentrant sur la liberté et l'impact.",
+                personalUse: "Un livre transformateur pour quiconque est prêt à remettre en question sa relation avec l'argent et à s'engager sur la voie de l'indépendance financière et d'une vie plus significative. Il offre une feuille de route détaillée pour la liberté financière, la réduction du stress lié à l'argent et la consommation consciente. Il est particulièrement pertinent pour ceux qui veulent vivre de manière plus écologique et alignée avec leurs valeurs. En suivant les étapes de ce programme, les lecteurs peuvent non seulement sécuriser leur avenir financier, mais aussi trouver plus de joie, de clarté et de but dans leur vie quotidienne, en se libérant des chaînes du consumérisme et de la 'rat race'.",
+                category: "Finance Personnelle",
+                categoryClass: "financepersonnelle-cover",
+                icon: "fas fa-leaf"
+            },
+            { id: 33, title: "Psychologie de l'argent", author: "Morgan Housel", rating: "★★★★★", summary: "Morgan Housel, un expert en finance et en comportement, explore dans ce livre captivant les subtilités de la psychologie humaine face à l'argent. Il soutient que la réussite financière n'est pas seulement une question de formules mathématiques ou de connaissances techniques, mais surtout de comportement – comment on pense à l'argent, comment on le gère et comment on réagit à ses hauts et ses bas. Le livre est une collection d'histoires courtes et de leçons intemporelles qui révèlent les biais cognitifs, les émotions et les habitudes qui influencent nos décisions financières, souvent de manière irrationnelle.\n\nHousel aborde des sujets comme le pouvoir de l'intérêt composé, le rôle de la chance et du risque, l'importance de l'épargne, la valeur de la patience et la capacité à gérer l'incertitude. Il met l'accent sur le fait que la bonne gestion de l'argent n'est pas ce que l'on sait, mais comment on se comporte. C'est un livre qui invite à l'humilité face aux marchés, à la persévérance et à l'adoption d'un état d'esprit qui privilégie la stabilité à long terme et la tranquillité d'esprit sur les gains rapides. C'est une lecture essentielle pour quiconque souhaite développer une relation plus saine et plus efficace avec l'argent, en comprenant la psychologie derrière ses propres décisions financières.",
+                lessons: [
+                    "Le comportement est plus important que l'intelligence ou la connaissance en matière d'argent. La capacité à contrôler ses émotions et à maintenir la discipline est la clé de la réussite financière durable.",
+                    "Le pouvoir de l'intérêt composé : de petits gains accumulés sur de longues périodes peuvent générer des richesses phénoménales. La patience est une vertu financière souvent sous-estimée.",
+                    "La chance et le risque jouent un rôle significatif. Reconnaissez que le succès n'est pas uniquement le fruit du travail acharné, et que l'échec n'est pas toujours dû à l'incompétence. Gérez les risques de manière proactive.",
+                    "L'épargne est la base de la liberté financière. La capacité à épargner ne dépend pas de vos revenus, mais de votre discipline et de votre capacité à contrôler vos désirs, en vous donnant un sentiment de contrôle et de sécurité.",
+                    "La richesse est ce que vous ne voyez pas. La vraie richesse est mesurée par ce que vous épargnez, pas par ce que vous dépensez sur des biens visibles. L'humilité financière est essentielle.",
+                    "Acceptez l'incertitude : Les marchés financiers et la vie sont imprévisibles. Développez une tolérance à l'incertitude et une capacité à prendre des décisions éclairées même lorsque toutes les informations ne sont pas disponibles, en vous préparant aux imprévus."
+                ],
+                professionalUse: "Extrêmement pertinent pour les conseillers financiers, les gestionnaires de patrimoine et les professionnels de l'investissement qui doivent comprendre non seulement les chiffres, mais aussi le comportement de leurs clients. Il aide à mieux communiquer les stratégies d'investissement, à gérer les attentes des clients face à la volatilité du marché et à les conseiller sur la base de principes comportementaux solides. Pour les entrepreneurs, il offre des insights sur la psychologie des consommateurs et des investisseurs, aidant à prendre des décisions financières d'entreprise plus éclairées et à gérer le capital avec une perspective psychologique. Il encourage à une approche plus humaine et réaliste de la gestion financière, qui reconnaît le rôle puissant des émotions.",
+                personalUse: "Un livre essentiel pour toute personne souhaitant améliorer sa relation avec l'argent. Il offre une nouvelle perspective sur l'épargne, l'investissement et la dépense, en se concentrant sur l'aspect comportemental plutôt que technique. Il aide à surmonter les biais cognitifs courants (comme la pensée de groupe ou la peur de manquer) qui conduisent à de mauvaises décisions financières. Ce livre est parfait pour ceux qui veulent cultiver la patience, la discipline et la frugalité intentionnelle pour bâtir un patrimoine à long terme et atteindre une véritable liberté financière. Il apporte une tranquillité d'esprit en démystifiant la complexité de la finance et en se concentrant sur les principes de bon sens qui mènent au succès durable, peu importe les fluctuations du marché.",
+                category: "Finance Personnelle",
+                categoryClass: "financepersonnelle-cover",
+                icon: "fas fa-comments-dollar"
+            },
+            { id: 34, title: "I Will Teach You To Be Rich", author: "Ramit Sethi", rating: "★★★★☆", summary: "Ce livre de Ramit Sethi est un guide pratique, direct et parfois provocateur pour les jeunes adultes qui souhaitent automatiser leurs finances personnelles et construire de la richesse sans se priver de tout ce qu'ils aiment. Sethi déconstruit le mythe selon lequel la gestion financière est compliquée et exige des privations extrêmes. Il propose une approche en six semaines pour mettre en place un système financier 'conscient' qui automatise l'épargne, l'investissement et le paiement des dettes, tout en laissant de la place pour dépenser sans culpabilité sur ce qui est important pour vous.\n\nLe livre couvre des sujets clés comme l'ouverture de comptes bancaires, la négociation des frais, l'automatisation des transferts, l'investissement dans des fonds indiciels à faible coût, la gestion des dettes étudiantes et des cartes de crédit, et même la négociation de salaires. Sethi insiste sur l'importance de faire les 'grosses victoires' (automatisation, investissement) en premier, car elles ont le plus grand impact. C'est un guide pragmatique, souvent humoristique, qui vise à rendre la finance personnelle accessible et même amusante, en se concentrant sur les actions qui génèrent le plus de résultats avec le moins d'effort conscient, permettant aux lecteurs de vivre leur 'vie riche' telle qu'ils la définissent.",
+                lessons: [
+                    "Automatisez vos finances : Mettez en place des transferts automatiques pour l'épargne, l'investissement et le paiement des dettes afin d'éliminer la discipline manuelle et d'assurer une progression constante vers vos objectifs.",
+                    "Maîtrisez les cartes de crédit : Utilisez les cartes de crédit pour obtenir des récompenses, mais payez toujours votre solde en totalité et à temps pour éviter les intérêts et bâtir un bon score de crédit.",
+                    "Investissez tôt et régulièrement dans des fonds indiciels à faible coût. C'est la stratégie la plus efficace pour la plupart des gens pour faire fructifier leur argent sur le long terme sans être un expert en bourse.",
+                    "Négociez pour des 'grosses victoires' : Négociez votre salaire, vos frais bancaires, et les conditions de vos dettes. Ce sont les actions à fort impact qui rapportent le plus de dividendes financiers par rapport à l'effort.",
+                    "Créez un budget 'conscient' : Décidez où vous voulez dépenser votre argent sans culpabilité ('guilt-free spending') et réduisez drastiquement les dépenses sur ce qui n'est pas important pour vous.",
+                    "Oubliez les 'petites économies' (latte factor) et concentrez-vous sur les grandes lignes. Les gains les plus importants viennent de l'automatisation de l'épargne et de l'investissement, pas de la privation quotidienne minime."
+                ],
+                professionalUse: "Très utile pour les jeunes professionnels et les freelances qui commencent leur carrière et ont besoin de mettre en place des bases financières solides. Il offre des conseils sur la négociation salariale, la gestion des finances d'entreprise et l'investissement personnel pour les revenus d'entreprise. Pour les entrepreneurs, il propose une approche pour automatiser les finances de leur petite entreprise et investir leurs profits de manière intelligente. C'est un livre qui encourage la proactivité financière et la prise de contrôle de ses revenus, pour s'assurer que le succès professionnel se traduit par une sécurité financière personnelle à long terme, en développant une mentalité d'investisseur éclairé et pragmatique.",
+                personalUse: "Un guide excellent pour les millennials et les jeunes adultes qui veulent devenir financièrement intelligents sans se prendre la tête. Il offre des étapes concrètes et faciles à suivre pour automatiser l'épargne, réduire les dettes et investir pour l'avenir. Il est parfait pour ceux qui veulent jouir de leur argent tout en étant responsables. Ce livre vous donnera la confiance nécessaire pour gérer vos finances, parler d'argent sans gêne, et créer une vie où l'argent travaille pour vous, vous permettant de vous concentrer sur vos passions et vos expériences, plutôt que sur le stress financier. C'est un livre qui promet et délivre la liberté financière avec une approche non-conformiste.",
+                category: "Finance Personnelle",
+                categoryClass: "financepersonnelle-cover",
+                icon: "fas fa-laptop-code"
+            }
+			
+			 
+        ];
+
+        const booksContainer = document.getElementById('booksContainer');
+        const bookDetailModal = new bootstrap.Modal(document.getElementById('bookDetailModal'));
+
+        function displayBooks(filterCategory = 'all') {
+            booksContainer.innerHTML = ''; // Clear previous books
+            const filteredBooks = filterCategory === 'all' ? books : books.filter(book => book.category.toLowerCase() === filterCategory);
+
+            filteredBooks.forEach(book => {
+                const col = document.createElement('div');
+                col.className = 'col-md-6 col-lg-4 d-flex'; // Use d-flex to make cards equal height
+
+                col.innerHTML = `
+                    <div class="book-card" data-id="${book.id}">
+                        <div class="book-cover ${book.categoryClass}">
+                            <i class="${book.icon}"></i>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">${book.title}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">${book.author}</h6>
+                            <div class="book-rating">${book.rating}</div>
+                            <p class="card-text book-summary">${book.summary.substring(0, 150)}...</p>
+                            <span class="badge" style="background-color: ${getComputedStyle(document.documentElement).getPropertyValue(`--${book.category.toLowerCase()}-color`)}">${book.category}</span>
+                            <button class="btn btn-primary mt-auto view-details-btn" data-id="${book.id}">Voir détails</button>
+                        </div>
+                    </div>
+                `;
+                booksContainer.appendChild(col);
+            });
+
+            document.querySelectorAll('.view-details-btn').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const bookId = parseInt(event.target.dataset.id);
+                    const bookData = books.find(book => book.id === bookId);
+                    
+                    document.getElementById('modalTitle').textContent = bookData.title;
+                    document.getElementById('modalAuthor').textContent = bookData.author;
+                    document.getElementById('modalRating').innerHTML = bookData.rating;
+                    document.getElementById('modalSummary').textContent = bookData.summary;
+                    
+                    const lessonsList = document.getElementById('modalLessons');
+                    lessonsList.innerHTML = '';
+                    bookData.lessons.forEach(lesson => {
+                        const li = document.createElement('li');
+                        li.className = 'lesson-item';
+                        li.textContent = lesson;
+                        lessonsList.appendChild(li);
+                    });
+                    
+                    document.getElementById('modalProfessionalUse').textContent = bookData.professionalUse;
+                    document.getElementById('modalPersonalUse').textContent = bookData.personalUse;
+                    
+                    const cover = document.getElementById('modalBookCover');
+                    cover.className = `book-cover-modal mb-3 ${bookData.categoryClass}`;
+                    cover.innerHTML = `<i class="${bookData.icon}"></i>`;
+                    
+                    const badge = document.getElementById('modalCategory');
+                    badge.textContent = bookData.category;
+                    badge.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue(`--${bookData.category.toLowerCase()}-color`);
+
+                    bookDetailModal.show();
+                });
+            });
+        }
+
+        // Initial display of all books
+        document.addEventListener('DOMContentLoaded', () => {
+            displayBooks();
+
+            // Category filter buttons
+            document.querySelectorAll('.category-filter .btn').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    // Remove active class from all buttons
+                    document.querySelectorAll('.category-filter .btn').forEach(btn => btn.classList.remove('active'));
+                    // Add active class to the clicked button
+                    event.target.classList.add('active');
+                    
+                    const category = event.target.dataset.category;
+                    displayBooks(category);
+                });
+            });
+
+            // Set dynamic CSS variables for category colors
+            const root = document.documentElement;
+            root.style.setProperty('--productivity-color', '#f39c12'); /* Orange */
+            root.style.setProperty('--mindset-color', '#9b59b6');      /* Purple */
+            root.style.setProperty('--finance-color', '#27ae60');      /* Green */
+            root.style.setProperty('--relationships-color', '#e74c3c'); /* Red */
+            root.style.setProperty('--health-color', '#3498db');       /* Blue */
+            root.style.setProperty('--communication-color', '#1abc9c'); /* Turquoise */
+            root.style.setProperty('--creativity-color', '#d35400'); /* Pumpkin */
+        });
+    </script>
+</body>
+</html>

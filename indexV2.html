@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bibliothèque Premium - Livres de développement personnel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+       :root {
+			--primary-color: #007bff;
+			--secondary-color: #6c757d;
+			--accent-color: #16a085;  /* Cette couleur est utilisée pour le fond actif */
+			
+		}
+
+        
+        body {
+            background-color: #f9f9f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background-color: var(--primary-color);
+            padding: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .navbar-brand {
+            color: white !important;
+            font-weight: bold;
+            font-size: 1.8rem;
+        }
+        .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, 0.7) !important;
+            margin-right: 15px;
+            font-size: 1.1rem;
+        }
+        .navbar-nav .nav-link:hover {
+            color: white !important;
+        }
+
+        .hero-section {
+            background: linear-gradient to right, #007bff, #0056b3); /* Dégradé bleu */
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .hero-section h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        .hero-section p {
+            font-size: 1.4rem;
+            max-width: 800px;
+            margin: 0 auto 30px auto;
+        }
+
+        .category-filter {
+            background-color: #e9ecef;
+            padding: 15px 0;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .category-filter .btn {
+            margin: 5px;
+            font-size: 1.1rem;
+            padding: 10px 20px;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+        .category-filter .btn-secondary {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            color: white;
+        }
+        .category-filter .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+        .category-filter .btn.active {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .book-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%; /* Ensure cards have equal height */
+            display: flex;
+            flex-direction: column;
+        }
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        .book-card .card-body {
+            padding: 25px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .book-card .card-title {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        .book-card .card-subtitle {
+            font-size: 1.1rem;
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+        }
+        .book-card .book-rating {
+            color: #ffc107; /* Or gold color for stars */
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        .book-card .book-summary {
+            font-size: 1rem;
+            color: #555;
+            flex-grow: 1; /* Allows summary to take up available space */
+        }
+        .book-card .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            margin-top: 20px;
+            padding: 10px 25px;
+            border-radius: 5px;
+            font-size: 1.05rem;
+            transition: background-color 0.3s ease;
+        }
+        .book-card .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        .book-cover {
+            height: 120px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            margin-bottom: 15px;
+        }
+        /* Category specific colors */
+        .productivity-cover { background-color: #f39c12; } /* Orange */
+        .mindset-cover { background-color: #9b59b6; }      /* Purple */
+        .finance-cover { background-color: #27ae60; }      /* Green */
+        .relationships-cover { background-color: #e74c3c; } /* Red */
+        .health-cover { background-color: #3498db; }       /* Blue */
+        .communication-cover { background-color: #1abc9c; } /* Turquoise */
+        .creativity-cover { background-color: #d35400; } /* Pumpkin */
+
+        /* Category badges */
+        .badge {
+            font-size: 0.9rem;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-weight: normal;
+            margin-top: 10px;
+            display: inline-block; /* To allow margin-top to work */
+        }
+
+        /* Modal specific styles */
+        .modal-header {
+            background-color: var(--primary-color);
+            color: white;
+            border-bottom: none;
+            padding: 20px;
+        }
+        .modal-title {
+            font-size: 2rem;
+            font-weight: 600;
+        }
+        .modal-body {
+            padding: 30px;
+            font-size: 1.1rem;
+            color: #444;
+        }
+        .modal-body h5 {
+            font-size: 1.4rem;
+            color: var(--primary-color);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        .modal-body ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .modal-body ul li {
+            margin-bottom: 8px;
+            padding-left: 25px;
+            position: relative;
+        }
+        .modal-body ul li:before {
+            content: "\f00c"; /* Check icon */
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+        }
+        .modal-footer {
+            border-top: none;
+            padding: 15px 30px;
+        }
+        .book-cover-modal {
+            height: 150px;
+            width: 150px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            color: white;
+            margin: 0 auto 20px auto; /* Center the cover in modal */
+        }
+
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+            font-size: 1rem;
+        }
+        footer .social-icons a {
+            color: white;
+            font-size: 1.5rem;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+        footer .social-icons a:hover {
+            color: var(--accent-color);
+        }
+        footer p {
+            margin-bottom: 0;
+        }
+
+
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Bibliothèque Premium</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Livres</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">À Propos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero-section">
+        <div class="container">
+            <h1>Découvrez Votre Prochain Livre Inspirant</h1>
+            <p class="lead">Plongez dans notre collection de livres de développement personnel soigneusement sélectionnés pour vous aider à atteindre votre plein potentiel.</p>
+        </div>
+    </section>
+
+    <section class="category-filter">
+        <div class="container text-center">
+            <button class="btn btn-secondary active" data-category="all">Toutes les Catégories</button>
+            <button class="btn btn-secondary" data-category="productivity">Productivité</button>
+            <button class="btn btn-secondary" data-category="mindset">Mindset</button>
+            <button class="btn btn-secondary" data-category="finance">Finance</button>
+            <button class="btn btn-secondary" data-category="relationships">Relations</button>
+            <button class="btn btn-secondary" data-category="health">Santé</button>
+            <button class="btn btn-secondary" data-category="communication">Communication</button>
+            <button class="btn btn-secondary" data-category="creativity">Créativité</button>
+        </div>
+    </section>
+
+    <section class="books-grid">
+        <div class="container">
+            <div class="row" id="booksContainer">
+                </div>
+        </div>
+    </section>
+
+    <div class="modal fade" id="bookDetailModal" tabindex="-1" aria-labelledby="bookDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle"></h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center">
+                        <div id="modalBookCover" class="book-cover-modal mb-3"></div>
+                        <p class="h6 text-muted" id="modalAuthor"></p>
+                        <div class="book-rating" id="modalRating"></div>
+                        <span class="badge" id="modalCategory"></span>
+                    </div>
+                    <hr>
+                    <h5>Résumé du Livre</h5>
+                    <p id="modalSummary"></p>
+                    <h5>Leçons Clés</h5>
+                    <ul id="modalLessons"></ul>
+                    <h5>Utilisation Professionnelle</h5>
+                    <p id="modalProfessionalUse"></p>
+                    <h5>Utilisation Personnelle</h5>
+                    <p id="modalPersonalUse"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Bibliothèque Premium. Tous droits réservés.</p>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const books = [
+            {
+                id: 1,
+                title: "L'art de la productivité",
+                author: "James Clear",
+                rating: "★★★★★",
+                summary: "Ce livre révolutionnaire décortique les principes fondamentaux de la productivité et de la création d'habitudes durables. Il explique comment de petits changements quotidiens, appelés 'habitudes atomiques', peuvent entraîner des résultats massifs et transformateurs au fil du temps. L'auteur propose des stratégies concrètes pour construire de bonnes habitudes, se débarrasser des mauvaises et maîtriser les comportements qui mènent au succès à long terme. C'est une lecture essentielle pour quiconque cherche à optimiser son efficacité personnelle et professionnelle en comprenant la science derrière la formation des habitudes.",
+                lessons: [
+                    "Les petites améliorations constantes mènent à des résultats extraordinaires. Le concept de l'amélioration de 1% chaque jour peut transformer radicalement votre vie sur le long terme.",
+                    "La formation d'habitudes est régie par quatre lois : rendre les habitudes évidentes, attrayantes, faciles et satisfaisantes. Appliquer ces lois simplifie grandement l'adoption de nouveaux comportements.",
+                    "Il est crucial de se concentrer sur le système plutôt que sur les objectifs. Un bon système garantit que les objectifs sont atteints naturellement en améliorant les processus et les comportements.",
+                    "L'identité est au cœur du changement de comportement : devenez le type de personne qui réalise les actions souhaitées. Changer qui vous croyez être est plus puissant que de changer ce que vous faites.",
+                    "L'environnement joue un rôle prépondérant. Aménagez votre espace pour favoriser les bonnes habitudes et rendre les mauvaises plus difficiles à suivre, en créant des signaux clairs et des barrières."
+                ],
+                professionalUse: "Idéal pour les managers et les équipes souhaitant mettre en place des workflows plus efficaces et encourager une culture de l'amélioration continue. Il aide à structurer les tâches, à réduire la procrastination et à développer des routines de travail plus saines et productives. Les principes peuvent être appliqués pour améliorer la gestion de projet, l'atteinte des objectifs d'équipe, et la formation de compétences clés chez les employés, en facilitant l'intégration de nouvelles pratiques.",
+                personalUse: "Parfait pour quiconque souhaite améliorer sa discipline personnelle, atteindre des objectifs de santé, d'apprentissage ou financiers. Il offre des outils pratiques pour arrêter les mauvaises habitudes (comme la procrastination ou les réseaux sociaux excessifs) et enraciner de nouvelles habitudes positives (comme la lecture quotidienne ou l'exercice régulier). Ce livre vous donne une feuille de route claire pour transformer vos aspirations en actions quotidiennes, menant à un bien-être général accru et à la réalisation de vos rêves.",
+                category: "Productivité",
+                categoryClass: "productivity-cover",
+                icon: "fas fa-tasks"
+            },
+            {
+                id: 2,
+                title: "Le pouvoir de l'habitude",
+                author: "Charles Duhigg",
+                rating: "★★★★★",
+                summary: "Ce livre explore en profondeur la science derrière la formation des habitudes, des comportements individuels aux routines organisationnelles et sociales. Charles Duhigg révèle comment les habitudes fonctionnent via une boucle neurologique de 'signal, routine, récompense' et comment, en comprenant cette boucle, nous pouvons non seulement changer nos propres vies, mais aussi influencer des groupes entiers et des marchés. Il présente des études de cas fascinantes, allant de la réussite d'individus à la transformation de grandes entreprises comme Starbucks, montrant l'impact colossal que les habitudes peuvent avoir sur notre quotidien.",
+                lessons: [
+                    "La boucle de l'habitude (signal, routine, récompense) est le mécanisme fondamental derrière tous les comportements habituels. Identifier chaque composant est la première étape pour remodeler une habitude.",
+                    "Les 'habitudes maîtresses' sont des habitudes qui, une fois changées, entraînent d'autres changements positifs en cascade dans d'autres domaines de la vie. Elles sont la clé pour des transformations profondes.",
+                    "Les organisations peuvent exploiter la science des habitudes pour améliorer la productivité et la sécurité. En créant des routines positives et en récompensant les bons comportements, on peut changer la culture d'entreprise.",
+                    "Le changement d'habitude est difficile mais possible si l'on comprend les mécanismes sous-jacents et si l'on anticipe les défis. Il faut souvent substituer une nouvelle routine à l'ancienne tout en conservant le même signal et la même récompense.",
+                    "La croyance et la conviction sont des catalyseurs puissants dans le processus de changement d'habitude, surtout en période de stress ou de doute. Croire en la possibilité de changer renforce la persévérance."
+                ],
+                professionalUse: "Indispensable pour les leaders, les responsables RH et les consultants qui souhaitent comprendre et modifier les comportements au sein des organisations. Il fournit un cadre pour identifier les habitudes d'entreprise, les transformer pour améliorer l'efficacité, la sécurité et la culture, et même créer de nouvelles habitudes de consommation chez les clients. Il est particulièrement utile pour les projets de gestion du changement et l'amélioration des processus métier en s'attaquant à la racine des comportements.",
+                personalUse: "Excellent pour comprendre pourquoi nous faisons ce que nous faisons et comment reprendre le contrôle. Que ce soit pour arrêter de fumer, commencer à faire de l'exercice, ou gérer son temps plus efficacement, ce livre offre des insights profonds sur la manière de déconstruire et de reconstruire les habitudes personnelles. Il aide à devenir plus conscient de ses propres signaux et récompenses, permettant ainsi de mieux se fixer des objectifs et de les atteindre en transformant les routines quotidiennes en leviers de succès.",
+                category: "Mindset",
+                categoryClass: "mindset-cover",
+                icon: "fas fa-brain"
+            },
+            {
+                id: 3,
+                title: "Réfléchissez et devenez riche",
+                author: "Napoleon Hill",
+                rating: "★★★★★",
+                summary: "Basé sur plus de vingt ans de recherche et des interviews de plus de 500 des individus les plus prospères de son époque, ce livre intemporel de Napoleon Hill est un guide complet pour atteindre la réussite financière et personnelle. Il révèle les treize principes clés de la prospérité, allant du désir ardent à la planification organisée, en passant par la persévérance et le pouvoir de l'esprit maître. Plus qu'un simple livre sur l'argent, c'est une philosophie de vie qui enseigne comment transformer le désir en réalité, en exploitant la puissance de la pensée et de l'action délibérée pour manifester l'abondance dans tous les aspects de l'existence.",
+                lessons: [
+                    "Un désir ardent et une intention claire sont les points de départ de toute réussite significative. Sans une aspiration brûlante, la motivation pour surmonter les obstacles sera insuffisante.",
+                    "La foi en sa propre capacité à atteindre ses objectifs est essentielle. Visualisez et croyez en votre succès avec une conviction inébranlable pour attirer les opportunités et les ressources nécessaires.",
+                    "L'autosuggestion permet de programmer l'esprit subconscient avec des pensées positives et des objectifs clairs. Répéter des affirmations renforce la confiance et l'alignement avec les ambitions.",
+                    "L'importance de la connaissance spécialisée et de l'apprentissage continu. Il ne s'agit pas seulement d'accumuler des informations, mais de savoir comment les organiser et les utiliser pour un objectif spécifique.",
+                    "Le concept de l'esprit maître (Master Mind) : s'allier avec des personnes partageant les mêmes idées pour atteindre un objectif commun. L'énergie combinée et les connaissances diversifiées de ce groupe sont exponentiellement plus puissantes.",
+                    "La persévérance est une qualité indispensable pour surmonter les échecs et les revers. La capacité de continuer malgré l'adversité est ce qui distingue ceux qui réussissent de ceux qui abandonnent."
+                ],
+                professionalUse: "Ce classique est une ressource inestimable pour les entrepreneurs, les cadres et toute personne souhaitant accélérer sa carrière. Il enseigne comment développer un état d'esprit de réussite, fixer des objectifs ambitieux, élaborer des plans stratégiques et construire des réseaux puissants. Les principes de Hill sont applicables pour le développement de nouvelles entreprises, l'innovation de produits, la gestion d'équipes et l'expansion des opportunités de marché. C'est une blueprint pour la croissance professionnelle et l'atteinte de sommets de carrière.",
+                personalUse: "Fondamental pour quiconque aspire à l'indépendance financière ou à la réalisation de rêves personnels. Au-delà de l'argent, il offre une méthodologie pour définir et atteindre n'importe quel objectif de vie, qu'il s'agisse d'améliorer sa santé, de cultiver des relations épanouissantes ou de développer ses talents. Il encourage une pensée proactive, la visualisation créative et la persévérance face aux défis, transformant ainsi les aspirations en réalités tangibles et un sentiment d'accomplissement profond.",
+                category: "Finance",
+                categoryClass: "finance-cover",
+                icon: "fas fa-dollar-sign"
+            },
+            {
+                id: 4,
+                title: "Les 7 habitudes des gens très efficaces",
+                author: "Stephen Covey",
+                rating: "★★★★★",
+                summary: "Ce livre fondateur offre un cadre holistique pour l'efficacité personnelle et interpersonnelle. Stephen Covey présente une approche basée sur des principes pour résoudre les problèmes personnels et professionnels, en se concentrant sur la transformation intérieure avant de chercher à influencer l'extérieur. Il développe sept habitudes qui guident vers la maturité, de la dépendance à l'interdépendance, en passant par l'indépendance. Il met l'accent sur l'importance de l'intégrité, de l'honnêteté et de la dignité humaine comme fondements d'une vie équilibrée et productive. C'est un guide pour une vie pleine de sens et d'impact, plutôt qu'une simple liste de techniques.",
+                lessons: [
+                    "Soyez proactif : Prenez l'initiative et la responsabilité de votre vie. Ne laissez pas les circonstances dicter votre réaction; choisissez votre réponse en fonction de vos valeurs et principes, et agissez en conséquence.",
+                    "Commencez par la fin en tête : Définissez clairement vos objectifs et ce que vous voulez accomplir avant de commencer. Avoir une vision claire de votre destination guide vos actions et décisions quotidiennes.",
+                    "Mettez les priorités aux priorités : Gérez votre temps et votre énergie en vous concentrant sur ce qui est le plus important, pas seulement ce qui est urgent. Identifiez les activités du Quadrant II (important mais non urgent) et dédiez-vous à elles.",
+                    "Pensez gagnant-gagnant : Recherchez des solutions qui bénéficient à toutes les parties impliquées dans les interactions. Favorisez la coopération plutôt que la compétition, bâtissant ainsi des relations solides et durables basées sur la confiance mutuelle.",
+                    "Cherchez d'abord à comprendre, ensuite à être compris : Écoutez attentivement et empathiquement avant de présenter votre propre point de vue. Cela conduit à une meilleure compréhension, à la résolution de conflits et à une communication plus efficace.",
+                    "Synergisez : Travaillez en équipe pour créer de nouvelles solutions qui sont meilleures que ce que chaque individu pourrait produire seul. La synergie est la capacité de valoriser les différences et d'en tirer parti pour une créativité collective.",
+                    "Aiguisez la scie : Renouvelez-vous physiquement, mentalement, spirituellement et socialement. Prenez du temps pour le repos, l'apprentissage, la méditation et les relations, afin de maintenir votre énergie et votre capacité à performer sur le long terme."
+                ],
+                professionalUse: "Un pilier pour le leadership, la gestion d'équipe et le développement organisationnel. Il aide les professionnels à développer une vision claire, à prioriser les tâches stratégiques, à améliorer la communication interpersonnelle et à favoriser une culture de collaboration. C'est particulièrement utile pour les managers cherchant à optimiser la productivité de leur équipe, à résoudre les conflits et à bâtir des relations client durables. Il fournit des outils pour une planification stratégique plus efficace et un développement des employés basé sur des principes éthiques.",
+                personalUse: "Transformateur pour la vie personnelle, ce livre offre des stratégies pour gérer le temps, établir des relations plus profondes et atteindre un équilibre de vie sain. Il guide les individus à travers un processus de découverte de leurs valeurs fondamentales, à les aligner avec leurs actions et à devenir plus responsables de leur propre bonheur et succès. Il aide à surmonter les défis quotidiens avec une perspective positive et à maintenir un sentiment de bien-être physique et mental, tout en cultivant des relations significatives avec la famille et les amis.",
+                category: "Mindset",
+                categoryClass: "mindset-cover",
+                icon: "fas fa-brain"
+            },
+            {
+                id: 5,
+                title: "Comment se faire des amis",
+                author: "Dale Carnegie",
+                rating: "★★★★★",
+                summary: "Ce manuel intemporel est un guide pratique pour améliorer ses compétences sociales et interpersonnelles. Dale Carnegie offre des principes simples mais puissants pour gagner la sympathie des autres, influencer les gens sans les manipuler et améliorer ses relations dans tous les aspects de la vie. Il enseigne l'importance de l'écoute active, de l'empathie, de l'appréciation sincère et de la capacité à voir les choses du point de vue de l'autre. Le livre regorge d'anecdotes et d'exemples concrets qui illustrent l'application de ces principes, rendant les concepts faciles à comprendre et à mettre en pratique pour quiconque souhaite améliorer son impact social et sa capacité à naviguer dans les interactions humaines.",
+                lessons: [
+                    "Ne critiquez pas, ne condamnez pas et ne vous plaignez pas. Adoptez une attitude positive et constructive, car la critique aliène et décourage, plutôt que de motiver le changement chez autrui.",
+                    "Donnez une appréciation honnête et sincère. Reconnaissez les efforts et les succès des autres avec authenticité; cela renforce l'estime de soi et encourage la coopération et la bonne volonté.",
+                    "Éveillez chez l'autre un désir ardent. Pour influencer quelqu'un, montrez-lui comment vos suggestions peuvent l'aider à atteindre ses propres objectifs ou satisfaire ses besoins, rendant ainsi vos idées irrésistibles.",
+                    "Intéressez-vous sincèrement aux autres. Écoutez activement, posez des questions et montrez un véritable intérêt pour leurs vies, leurs passions et leurs préoccupations. Cela crée des liens profonds et un sentiment de valeur.",
+                    "Souriez. Un sourire authentique est un langage universel de bienvenue et de chaleur, qui rend les autres plus à l'aise et réceptifs à votre présence et à vos idées.",
+                    "Rappelez-vous que le nom d'une personne est pour elle le son le plus doux et le plus important de toutes les langues. Utiliser le nom d'une personne la rend spéciale et montre que vous accordez de l'importance à son individualité.",
+                    "Parlez de ce qui intéresse l'autre personne. Adaptez vos conversations aux sujets qui passionnent votre interlocuteur, ce qui rend l'échange plus agréable et pertinent pour lui.",
+                    "Faites en sorte que l'autre personne se sente importante – et faites-le sincèrement. Chacun aspire à la reconnaissance. En reconnaissant la valeur des autres, vous construisez la confiance et le respect mutuel."
+                ],
+                professionalUse: "Essentiel pour les professionnels de la vente, les managers, les recruteurs et tous ceux dont le succès dépend de leurs relations interpersonnelles. Il fournit des techniques pour établir un rapport rapide avec les clients, gérer les négociations délicates, motiver les employés et résoudre les conflits d'équipe. C'est un atout majeur pour le réseautage, la présentation en public et la création d'un environnement de travail harmonieux et productif où chacun se sent valorisé et entendu, améliorant ainsi la collaboration et l'efficacité des projets.",
+                personalUse: "Un guide inestimable pour améliorer toutes les relations personnelles, des amitiés aux liens familiaux. Il aide à devenir un meilleur auditeur, un communicateur plus persuasif et une personne plus appréciée. Les principes sont applicables pour renforcer les liens avec les proches, se faire de nouveaux amis, et même gérer les désaccords de manière constructive. Il vous donne la confiance nécessaire pour interagir avec les autres de manière authentique et positive, conduisant à une vie sociale plus riche et plus épanouissante et un sentiment de connexion profonde avec votre entourage.",
+                category: "Communication",
+                categoryClass: "communication-cover",
+                icon: "fas fa-comments"
+            },
+            {
+                id: 6,
+                title: "L'Alchimiste",
+                author: "Paulo Coelho",
+                rating: "★★★★★",
+                summary: "Ce roman allégorique suit le parcours initiatique de Santiago, un jeune berger andalou qui abandonne sa vie confortable pour suivre son rêve de trouver un trésor caché près des Pyramides d'Égypte. Son voyage épique à travers le désert est une métaphore profonde de la découverte de soi, de la poursuite des rêves et de l'écoute de son cœur. À travers des rencontres mystiques et des défis inattendus, Santiago apprend les leçons de l'univers, la 'Légende Personnelle' et le langage universel. Le livre est une méditation sur le destin, le libre arbitre, et la capacité de chaque individu à réaliser ses aspirations les plus profondes en se connectant à la sagesse de l'univers. C'est un hymne à la persévérance et à la foi en son propre chemin.",
+                lessons: [
+                    "Chacun a une 'Légende Personnelle', un destin unique à accomplir. La clé est d'écouter son cœur et de suivre les signes que l'univers nous envoie pour la réaliser, même si le chemin semble incertain.",
+                    "La peur de l'échec est souvent un obstacle plus grand que l'échec lui-même. Oser poursuivre ses rêves malgré les doutes est essentiel pour la croissance et l'accomplissement personnel.",
+                    "L'univers conspire toujours en faveur de ceux qui ont un désir ardent et qui s'engagent pleinement à poursuivre leur Légende Personnelle. Les opportunités et les ressources apparaissent lorsque l'on est aligné avec son but.",
+                    "Le véritable trésor n'est pas toujours matériel, mais souvent la sagesse et l'expérience acquises durant le voyage. La transformation intérieure est la plus grande récompense de la quête.",
+                    "Il est important d'être présent et conscient des 'signes' et des opportunités qui se présentent. L'univers communique constamment, et c'est à nous d'apprendre à décoder ses messages pour nous guider.",
+                    "L'amour est la force la plus puissante, capable de transformer et de donner un sens profond à toute quête. Les relations authentiques enrichissent le voyage et renforcent la détermination."
+                ],
+                professionalUse: "Inspire la vision stratégique et la persévérance chez les entrepreneurs et les créatifs. Il encourage à suivre son intuition, à surmonter les obstacles avec foi et à ne pas abandonner ses projets, même face à l'adversité. Il aide à cultiver un état d'esprit résilient et à reconnaître les opportunités cachées, transformant les défis en catalyseurs de croissance. Pour les professionnels, il s'agit de trouver un sens plus profond à leur travail et de le lier à leur 'Légende Personnelle', ce qui conduit à une plus grande satisfaction et à des réalisations innovantes.",
+                personalUse: "Un puissant rappel de l'importance de suivre ses rêves et d'écouter son intuition. Ce livre encourage à prendre des risques, à sortir de sa zone de confort et à faire confiance au processus de la vie. Il offre une perspective spirituelle sur les défis personnels, aidant à voir les revers non pas comme des échecs, mais comme des leçons nécessaires sur le chemin de la réalisation de soi. Il est parfait pour ceux qui cherchent un sens plus profond à leur existence et qui ont besoin d'encouragement pour entreprendre un voyage de transformation personnelle, les aidant à se sentir plus connectés à leur but et à l'univers.",
+                category: "Mindset",
+                categoryClass: "mindset-cover",
+                icon: "fas fa-brain"
+            },
+            {
+                id: 7,
+                title: "D'un coup d'œil",
+                author: "Malcolm Gladwell",
+                rating: "★★★★★",
+                summary: "Ce livre explore le concept du 'mince tranchage' (thin-slicing) – la capacité de l'esprit humain à prendre des décisions rapides et précises basées sur des informations limitées. Malcolm Gladwell nous emmène dans un voyage fascinant à travers des exemples allant de l'expertise des restaurateurs à l'intuition des militaires en passant par les jugements instantanés des psychologues matrimoniaux. Il soutient que nos jugements les plus spontanés et nos premières impressions sont souvent plus fiables qu'une analyse prolongée et délibérée. Le livre nous invite à faire confiance à notre intuition et à comprendre les mécanismes subconscients qui façonnent nos perceptions et nos décisions, démontrant comment la rapidité de la pensée peut être une forme de sagesse puissante.",
+                lessons: [
+                    "Les jugements rapides et les premières impressions, souvent sous-estimés, peuvent être étonnamment précis. Notre cerveau est capable de déduire des informations complexes à partir de données minimales, grâce à un processus appelé 'mince tranchage'.",
+                    "L'intuition n'est pas de la magie, mais le résultat d'une expérience et d'une expertise accumulées qui permettent au subconscient de reconnaître des motifs et de prendre des décisions éclairées sans analyse consciente détaillée.",
+                    "Trop d'informations ou une analyse excessive peuvent parfois entraver la prise de décision efficace, menant à la 'paralysie par l'analyse'. Parfois, moins c'est plus, surtout quand l'intuition est bien entraînée.",
+                    "Les environnements et les signaux subtils jouent un rôle crucial dans nos perceptions et nos jugements. Comprendre ces influences cachées permet de mieux évaluer les situations et les personnes.",
+                    "L'entraînement et l'expérience sont essentiels pour affiner l'intuition et la rendre plus fiable. Les experts sont capables de 'trancher finement' car ils ont emmagasiné une vaste base de données d'expériences pertinentes.",
+                    "Il est important de trouver un équilibre entre la pensée rapide et la pensée lente, selon le contexte. Pour les situations complexes avec des enjeux élevés, une analyse délibérée est nécessaire, mais pour d'autres, l'intuition peut être supérieure."
+                ],
+                professionalUse: "Pertinent pour les leaders, les professionnels de la vente, les créatifs et quiconque doit prendre des décisions rapides sous pression. Il encourage à faire confiance à son expertise et à son instinct, tout en reconnaissant les limites de cette approche. Il est utile pour l'évaluation rapide de situations, la gestion de crise et l'amélioration de l'intuition managériale. Pour les entrepreneurs, cela peut signifier la capacité à évaluer rapidement les opportunités de marché ou la viabilité d'un partenariat. Pour les managers, il aide à lire les dynamiques d'équipe et à prendre des décisions d'embauche plus éclairées.",
+                personalUse: "Ce livre aide à comprendre et à faire confiance à ses propres intuitions dans la vie quotidienne. Il peut améliorer la prise de décision rapide dans des situations sociales, des choix personnels ou même des évaluations de personnes. Il encourage à cultiver l'expérience dans des domaines clés pour affiner son 'tranchage mince' personnel. C'est une lecture qui modifie la façon dont vous percevez votre propre capacité à juger et à réagir, vous rendant plus confiant dans vos décisions rapides et vos premières impressions, et vous aidant à naviguer plus efficacement dans des situations ambiguës ou sous pression.",
+                category: "Mindset",
+                categoryClass: "mindset-cover",
+                icon: "fas fa-brain"
+            },
+            {
+                id: 8,
+                title: "Le manuel du guerrier pacifique",
+                author: "Dan Millman",
+                rating: "★★★★★",
+                summary: "Ce récit autobiographique et spirituel suit Dan, un jeune gymnaste talentueux mais tourmenté, dont la vie bascule après sa rencontre avec un mystérieux vieil homme nommé Socrate, un guide spirituel énigmatique. Socrate enseigne à Dan une nouvelle philosophie de vie, axée sur la conscience de l'instant présent, la discipline intérieure et la recherche de la sagesse au-delà des apparences. Le livre explore les thèmes de la mort, de l'amour, de la peur, et du sens de la vie, en défiant les conventions de la pensée matérialiste. C'est un voyage initiatique qui transforme la vision du monde de Dan, lui apprenant à trouver la paix et la force en lui-même, même au milieu de l'adversité. C'est un conte profondément inspirant sur la transcendance et la découverte de son vrai potentiel.",
+                lessons: [
+                    "Le moment présent est tout ce qui existe. Libérez-vous des regrets du passé et des anxiétés concernant l'avenir pour vivre pleinement et consciemment chaque instant, car c'est là que réside le véritable pouvoir.",
+                    "La véritable force ne vient pas de la puissance physique, mais de la paix intérieure et de la maîtrise de soi. Un 'guerrier pacifique' affronte la vie avec calme, courage et clarté d'esprit, quelles que soient les circonstances extérieures.",
+                    "La vie est une série d'expériences et de leçons. Chaque défi est une opportunité de croissance et de compréhension plus profonde de soi et du monde, si l'on choisit de l'aborder avec curiosité et ouverture.",
+                    "Les peurs et les doutes sont des illusions créées par l'esprit. En les confrontant et en reconnaissant leur nature éphémère, on peut les dépasser et révéler sa force intérieure inébranlable.",
+                    "L'ego et l'attachement aux résultats sont des sources de souffrance. Apprenez à lâcher prise sur le besoin de contrôler et à accepter ce qui est, trouvant ainsi la liberté et la sérénité.",
+                    "La sagesse se trouve souvent dans les choses simples et les expériences quotidiennes. Il n'est pas nécessaire de chercher des réponses complexes; l'illumination est accessible en observant attentivement la vie ordinaire."
+                ],
+                professionalUse: "Utile pour les professionnels cherchant à gérer le stress, à améliorer leur concentration et à maintenir une perspective équilibrée face aux défis du travail. Il encourage la pleine conscience dans les tâches quotidiennes, ce qui peut mener à une meilleure performance et à une réduction de l'épuisement professionnel. Il offre une approche philosophique pour aborder les projets, les conflits et la pression, permettant de rester calme et centré même dans des environnements très exigeants. Pour les leaders, il peut inspirer une culture de la résilience et de la sagesse au sein de leur équipe.",
+                personalUse: "Profondément transformateur pour la croissance personnelle et spirituelle. Il offre des outils pour gérer l'anxiété, développer la pleine conscience et trouver un sens plus profond à la vie. Il aide à surmonter les peurs, à vivre dans le présent et à cultiver la paix intérieure. C'est un livre qui peut radicalement changer votre perception de vous-même et du monde, vous aidant à trouver la joie dans les petites choses et à affronter les grandes questions de l'existence avec courage et sérénité. Idéal pour ceux qui cherchent une voie spirituelle pragmatique dans la vie quotidienne.",
+                category: "Mindset",
+                categoryClass: "mindset-cover",
+                icon: "fas fa-brain"
+            },
+            {
+                id: 9,
+                title: "Influence et manipulation",
+                author: "Robert Cialdini",
+                rating: "★★★★★",
+                summary: "Ce livre est une référence incontournable pour comprendre les principes psychologiques qui nous poussent à dire 'oui'. Robert Cialdini, un psychologue social renommé, explore les six principes universels de la persuasion : la réciprocité, l'engagement et la cohérence, la preuve sociale, la sympathie, l'autorité et la rareté. En s'appuyant sur des années de recherche et des expériences pratiques, il démontre comment ces leviers d'influence sont utilisés (souvent inconsciemment) pour nous faire agir d'une certaine manière, que ce soit dans les ventes, le marketing, la politique ou les relations interpersonnelles. Le livre est non seulement un guide pour devenir un communicateur plus persuasif, mais aussi un bouclier pour se défendre contre les tentatives de manipulation. C'est une lecture essentielle pour naviguer dans un monde où la persuasion est omniprésente et souvent subtile.",
+                lessons: [
+                    "Le principe de réciprocité : Les gens se sentent obligés de rendre un service ou une faveur, même non sollicités. Offrir quelque chose en premier peut créer une dette psychologique et favoriser la coopération.",
+                    "L'engagement et la cohérence : Une fois que quelqu'un prend un engagement (surtout publiquement ou par écrit), il est plus enclin à rester cohérent avec cet engagement. Les petits engagements peuvent mener à des engagements plus importants.",
+                    "La preuve sociale : Nous avons tendance à suivre ce que font les autres, surtout en cas d'incertitude. La popularité d'une idée ou d'un produit peut être un puissant facteur de persuasion.",
+                    "La sympathie : Nous sommes plus susceptibles d'être influencés par les personnes que nous aimons ou auxquelles nous nous identifions. Les facteurs comme l'attirance physique, la similarité, les compliments et la coopération augmentent la sympathie.",
+                    "L'autorité : Nous sommes enclins à obéir aux figures d'autorité ou aux experts. Les titres, les uniformes et les symboles de statut peuvent accroitre l'influence perçue.",
+                    "La rareté : Ce qui est rare ou difficile à obtenir est perçu comme plus désirable. La limitation des quantités ou des délais crée un sentiment d'urgence et augmente la valeur perçue d'une offre.",
+                    "L'application éthique : Comprendre ces principes permet non seulement de les utiliser, mais aussi de se protéger contre les manipulations. Il est crucial d'appliquer ces techniques de manière éthique et transparente pour bâtir la confiance à long terme."
+                ],
+                professionalUse: "Indispensable pour les professionnels du marketing, des ventes, de la négociation et du leadership. Il fournit des stratégies éprouvées pour construire des campagnes de marketing plus efficaces, améliorer les taux de conversion, négocier avec succès et motiver les équipes. Il aide à comprendre le comportement des clients, à anticiper leurs objections et à construire des relations basées sur l'influence positive. C'est une ressource clé pour affiner les pitchs de vente, améliorer la rédaction persuasive et concevoir des messages qui résonnent profondément avec l'audience cible, sans tomber dans des pratiques trompeuses.",
+                personalUse: "Très utile pour améliorer la communication quotidienne et la capacité à obtenir ce que l'on veut de manière éthique, que ce soit pour persuader un ami, gérer des interactions familiales ou même pour comprendre pourquoi nous achetons certaines choses. Il rend les individus plus conscients des tactiques de persuasion qu'ils rencontrent et leur donne les outils pour résister aux influences indésirables. Il aide à devenir un consommateur plus averti et un citoyen plus critique, tout en améliorant la capacité à communiquer ses propres besoins et désirs de manière plus convaincante et harmonieuse dans toutes les sphères de la vie.",
+                category: "Communication",
+                categoryClass: "communication-cover",
+                icon: "fas fa-comments"
+            },
+            {
+                id: 10,
+                title: "Créativité, Inc.",
+                author: "Ed Catmull",
+                rating: "★★★★★",
+                summary: "Coécrit par le co-fondateur de Pixar Animation Studios et président de Walt Disney Animation Studios, Ed Catmull, ce livre est un guide inestimable pour construire et maintenir une culture d'entreprise créative. Il partage les leçons apprises au fil des décennies de gestion d'une des entreprises les plus innovantes et acclamées du monde. Catmull détaille les principes qui ont permis à Pixar de produire une série de films à succès tout en cultivant un environnement où la créativité, l'honnêteté et l'expérimentation sont encouragées. Ce n'est pas un livre sur la création artistique, mais sur la gestion des personnes, des processus et des problèmes qui se posent lorsque l'on s'efforce de créer quelque chose de vraiment nouveau et original. C'est une lecture obligatoire pour les leaders qui aspirent à libérer le potentiel créatif de leurs équipes et à construire des organisations résilientes face au changement.",
+                lessons: [
+                    "La qualité du personnel est primordiale. Engager des personnes talentueuses et passionnées, puis leur donner la liberté et l'autonomie pour innover, est plus important que de fixer des objectifs rigides.",
+                    "L'honnêteté radicale et le feedback constructif sont essentiels. Créer un environnement sûr où chacun peut exprimer ses idées et ses critiques, même difficiles, sans crainte de représailles, est la pierre angulaire de l'amélioration continue.",
+                    "Les erreurs et les échecs ne sont pas des revers, mais des opportunités d'apprentissage. Il faut encourager l'expérimentation et considérer les ratés comme des étapes nécessaires du processus créatif, plutôt que de les punir.",
+                    "Protéger le processus créatif des pressions extérieures et des interférences excessives. Il est crucial de donner aux équipes le temps et l'espace pour développer leurs idées, même si elles semblent non conventionnelles au début.",
+                    "La gestion ne consiste pas à éviter les problèmes, mais à les aborder de front avec transparence et pragmatisme. Un leader doit créer des systèmes qui permettent aux problèmes d'être identifiés et résolus efficacement.",
+                    "Maintenir un équilibre entre la vision artistique et les contraintes commerciales. Il s'agit de trouver des moyens innovants de satisfaire les deux, sans compromettre l'intégrité créative du produit."
+                ],
+                professionalUse: "Essentiel pour les dirigeants, les entrepreneurs, les chefs de projet et toute personne en charge d'équipes créatives ou d'innovation. Il offre un modèle pour construire une culture d'entreprise qui favorise l'audace, la collaboration et la résolution de problèmes créative. Il est particulièrement pertinent pour les industries nécessitant une innovation constante (tech, design, médias, R&D). Le livre aide à mettre en place des réunions de feedback efficaces, à gérer les talents et à créer des environnements où les idées les plus folles peuvent éclore et se transformer en produits révolutionnaires. Il donne des insights sur la façon de structurer les équipes pour maximiser leur potentiel créatif.",
+                personalUse: "Inspire la pensée créative et l'expérimentation dans la vie personnelle. Il encourage à ne pas avoir peur de l'échec et à cultiver un état d'esprit de croissance face aux défis personnels. Pour les artistes ou les individus passionnés par un domaine, il offre une perspective sur la persévérance, la valeur du feedback et l'importance de s'entourer de personnes qui stimulent l'innovation. Il peut aider à débloquer des blocages créatifs et à adopter une approche plus souple et plus ouverte à la résolution de problèmes dans tous les aspects de sa vie, qu'il s'agisse de projets personnels, de hobbies ou de défis familiaux.",
+                category: "Créativité",
+                categoryClass: "creativity-cover",
+                icon: "fas fa-lightbulb"
+            }
+        ];
+
+        const booksContainer = document.getElementById('booksContainer');
+        const bookDetailModal = new bootstrap.Modal(document.getElementById('bookDetailModal'));
+
+        function displayBooks(filterCategory = 'all') {
+            booksContainer.innerHTML = ''; // Clear previous books
+            const filteredBooks = filterCategory === 'all' ? books : books.filter(book => book.category.toLowerCase() === filterCategory);
+
+            filteredBooks.forEach(book => {
+                const col = document.createElement('div');
+                col.className = 'col-md-6 col-lg-4 d-flex'; // Use d-flex to make cards equal height
+
+                col.innerHTML = `
+                    <div class="book-card" data-id="${book.id}">
+                        <div class="book-cover ${book.categoryClass}">
+                            <i class="${book.icon}"></i>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">${book.title}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">${book.author}</h6>
+                            <div class="book-rating">${book.rating}</div>
+                            <p class="card-text book-summary">${book.summary.substring(0, 150)}...</p>
+                            <span class="badge" style="background-color: ${getComputedStyle(document.documentElement).getPropertyValue(`--${book.category.toLowerCase()}-color`)}">${book.category}</span>
+                            <button class="btn btn-primary mt-auto view-details-btn" data-id="${book.id}">Voir détails</button>
+                        </div>
+                    </div>
+                `;
+                booksContainer.appendChild(col);
+            });
+
+            document.querySelectorAll('.view-details-btn').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const bookId = parseInt(event.target.dataset.id);
+                    const bookData = books.find(book => book.id === bookId);
+                    
+                    document.getElementById('modalTitle').textContent = bookData.title;
+                    document.getElementById('modalAuthor').textContent = bookData.author;
+                    document.getElementById('modalRating').innerHTML = bookData.rating;
+                    document.getElementById('modalSummary').textContent = bookData.summary;
+                    
+                    const lessonsList = document.getElementById('modalLessons');
+                    lessonsList.innerHTML = '';
+                    bookData.lessons.forEach(lesson => {
+                        const li = document.createElement('li');
+                        li.className = 'lesson-item';
+                        li.textContent = lesson;
+                        lessonsList.appendChild(li);
+                    });
+                    
+                    document.getElementById('modalProfessionalUse').textContent = bookData.professionalUse;
+                    document.getElementById('modalPersonalUse').textContent = bookData.personalUse;
+                    
+                    const cover = document.getElementById('modalBookCover');
+                    cover.className = `book-cover-modal mb-3 ${bookData.categoryClass}`;
+                    cover.innerHTML = `<i class="${bookData.icon}"></i>`;
+                    
+                    const badge = document.getElementById('modalCategory');
+                    badge.textContent = bookData.category;
+                    badge.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue(`--${bookData.category.toLowerCase()}-color`);
+
+                    bookDetailModal.show();
+                });
+            });
+        }
+
+        // Initial display of all books
+        document.addEventListener('DOMContentLoaded', () => {
+            displayBooks();
+
+            // Category filter buttons
+            document.querySelectorAll('.category-filter .btn').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    // Remove active class from all buttons
+                    document.querySelectorAll('.category-filter .btn').forEach(btn => btn.classList.remove('active'));
+                    // Add active class to the clicked button
+                    event.target.classList.add('active');
+                    
+                    const category = event.target.dataset.category;
+                    displayBooks(category);
+                });
+            });
+
+            // Set dynamic CSS variables for category colors
+            const root = document.documentElement;
+            root.style.setProperty('--productivity-color', '#f39c12'); /* Orange */
+            root.style.setProperty('--mindset-color', '#9b59b6');      /* Purple */
+            root.style.setProperty('--finance-color', '#27ae60');      /* Green */
+            root.style.setProperty('--relationships-color', '#e74c3c'); /* Red */
+            root.style.setProperty('--health-color', '#3498db');       /* Blue */
+            root.style.setProperty('--communication-color', '#1abc9c'); /* Turquoise */
+            root.style.setProperty('--creativity-color', '#d35400'); /* Pumpkin */
+        });
+    </script>
+</body>
+</html>
